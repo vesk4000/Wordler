@@ -98,7 +98,7 @@ namespace Wordler
                 double probability = 0;
                 foreach (var letter in word)
                 {
-                    probability += (letterProbability[letter] / Math.Log2(letterProbability[letter]));
+                    probability += (letterProbability[letter] / Math.Log10(letterProbability[letter]));
                 }
                 wordProbability.Add(word, -probability);
             }
