@@ -12,7 +12,7 @@ namespace Wordler
 	public class Solver
 	{
 		//TODO change directory
-		public static List<string> wordList = File.ReadAllText(@"C:\Users\zala2\Documents\VDM\wordler\wordlist.txt").Split("\",\"").ToList();
+		public static List<string> wordList = File.ReadAllText(@"..\..\..\wordlist.txt").Split(";").ToList();
 		public static string Solve(List<WordClues> wordClues = null)
 		{
 			OrderedDictionary wordsOrder = new OrderedDictionary();
