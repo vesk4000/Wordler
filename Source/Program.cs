@@ -80,16 +80,10 @@ namespace Wordler
 
         private static void CalculateProbabilities()
         {
-            int letterListCount = Solver.wordList.Count;
-            var wordlist = Solver.wordList;
-            Dictionary<char, double>[] letterProbability = new Dictionary<char, double>[5];
-
-            for (int i = 0; i < 5; ++i)
-            {
-                letterProbability[i] = new Dictionary<char, double>();
-            }
-
             #region eto1302's way of finding best words
+            // int letterListCount = Solver.wordList.Count * 5;
+            //var wordlist = Solver.wordList;
+            //Dictionary<char, double> letterProbability = new Dictionary<char, double>();
             //for (char i = 'a'; i <= 'z'; ++i)
             //{
             //    int occurances = 0;
@@ -116,6 +110,16 @@ namespace Wordler
             //it's a modified version of eto1302's idea of finding the best words
             //but rather than calculating the general probability of the letters
             //this algorithm calculates the probability of a letter in a specific position and based on that formulates the probability of the words
+
+            int letterListCount = Solver.wordList.Count;
+            var wordlist = Solver.wordList;
+            Dictionary<char, double>[] letterProbability = new Dictionary<char, double>[5];
+
+            for (int i = 0; i < 5; ++i)
+            {
+                letterProbability[i] = new Dictionary<char, double>();
+            }
+
             for (int i = 0; i < 5; ++i)
             {
                 for (char j = 'a'; j <= 'z'; ++j)
