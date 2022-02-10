@@ -96,7 +96,7 @@ namespace Wordler
             foreach (var word in wordlist)
             {
                 double probability = 0;
-                foreach (var letter in string.Join("", word.ToCharArray().Distinct()))
+                foreach (var letter in word)
                 {
                     probability += (letterProbability[letter] / Math.Log(letterProbability[letter]));
                 }
