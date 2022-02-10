@@ -33,7 +33,7 @@ namespace Wordler
                     guessCount++;
                 }
                 guesses += guessCount;
-                Console.WriteLine($"{goal}: {guessCount}");
+                if(guessCount > 6)Console.WriteLine($"{goal}: {guessCount}");
             }
             Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
         }
