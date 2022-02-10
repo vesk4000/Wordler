@@ -10,37 +10,41 @@ namespace Wordler
 	public class WordClues
 	{
 		public Dictionary<int, char> Greens;
-		public Dictionary<int, char> Yellows;
-		public List<char> Greys;
+		public HashSet<Tuple<int, char>> Yellows;
+		public HashSet<char> Greys;
 
 		public WordClues(Dictionary<int, char> inputGreens,
-						 Dictionary<int, char> inputYellows,
+						 HashSet<Tuple<int, char>> inputYellows,
 						 List<char> inputGreys)
 		{
 			this.Greens = new Dictionary<int, char>(inputGreens);
-			this.Yellows = new Dictionary<int, char>(inputYellows);
-			this.Greys = new List<char>(inputGreys);
+			this.Yellows = new HashSet<Tuple<int, char>>(inputYellows);
+			this.Greys = new HashSet<char>(inputGreys);
 		}
 
 		public WordClues() {
 			this.Greens = new Dictionary<int, char>();
-			this.Yellows = new Dictionary<int, char>();
-			this.Greys = new List<char>();
+			this.Yellows = new HashSet<Tuple<int, char>>();
+			this.Greys = new HashSet<char>();
 		}
 
 		public bool Match(string word)
 		{
+			if(word == "cigar")
+            {
+				;
+            }
+			int index = 0;
 			foreach (char letter in word)
 			{
 				if (Greys.Contains(letter)) return false;
 
-				if (Yellows.ContainsKey(word.IndexOf(letter)) && 
-					Yellows[word.IndexOf(letter)] == letter) return false;
+				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter)) return false;
 
-				if (Greens.ContainsKey(word.IndexOf(letter)) &&
-					Greens[word.IndexOf(letter)] != letter) return false;
+				if (Greens.Any(e => e.Key == index && e.Value != letter)) return false;
+				index++;
 			}
-
+			
 			return true;
 		}
 
