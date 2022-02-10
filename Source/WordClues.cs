@@ -15,7 +15,7 @@ namespace Wordler
 
 		public WordClues(Dictionary<int, char> inputGreens,
 						 HashSet<Tuple<int, char>> inputYellows,
-						 List<char> inputGreys)
+						 HashSet<char> inputGreys)
 		{
 			this.Greens = new Dictionary<int, char>(inputGreens);
 			this.Yellows = new HashSet<Tuple<int, char>>(inputYellows);
@@ -53,5 +53,21 @@ namespace Wordler
 
 			throw new NotImplementedException();
 		}
-	}
+
+        public void Add(Dictionary<int, char> greens, HashSet<Tuple<int, char>> yellows, HashSet<char> greys)
+        {
+            foreach (var green in greens)
+            {
+				if (!Greens.ContainsKey(green.Key)) Greens.Add(green.Key, green.Value);
+            }
+            foreach (var yellow in yellows)
+            {
+				if (!Yellows.Any(e => e.Item1 == yellow.Item1 && e.Item2 == yellow.Item2)) Yellows.Add(yellow);
+            }
+            foreach (var grey in greys)
+            {
+				if (!Greys.Any(e => e == grey)) Greys.Add(grey);
+            }
+        }
+    }
 }

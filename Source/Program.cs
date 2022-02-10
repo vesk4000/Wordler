@@ -74,7 +74,8 @@ namespace Wordler
             //		Thread.Sleep(1000);
             //	});*/
             CalculateProbabilities();
-            Solver.EtoSolve();
+            //Solver.EtoSolve();
+            Solver.GiveClues();
         }
 
         private static void CalculateProbabilities()

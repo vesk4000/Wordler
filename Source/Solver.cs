@@ -32,7 +32,7 @@ namespace Wordler
                     guessCount++;
                 }
                 guesses += guessCount;
-                if (guessCount > 6) { failed++; }
+                if (guessCount > 6) { failed++; Console.WriteLine(goal); }
                 Console.WriteLine($"{goal}: {guessCount}");
             }
             Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
@@ -67,6 +67,42 @@ namespace Wordler
                 Console.WriteLine($"{word.Key} : {word.Value}");
             }
             return "Yomum";
+        }
+
+        public static void GiveClues()
+        {
+            wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
+            WordClues wordClues = new WordClues();
+            string guess = string.Empty;
+            while (true)
+            {
+                guess = wordProbability.Keys.FirstOrDefault(e => wordClues.Match(e));
+                Console.WriteLine(guess);
+                Console.Write("Enter Greys without spaces: ");
+                HashSet<char> greys = Console.ReadLine().ToHashSet();
+                Console.Write("Enter Yellows in format({letter}{position}): ");
+                HashSet<Tuple<int, char>> yellows = new HashSet<Tuple<int, char>>();
+                foreach (var item in Console.ReadLine().Split().ToArray())
+                {
+                    if (item == string.Empty) break;
+                    var letter = item[0];
+                    var index = item[1] - '0';
+                    yellows.Add(new Tuple<int, char>(index, letter));
+                }
+                Console.Write("Enter Greens in format({letter}{position}): ");
+                Dictionary<int, char> greens = new Dictionary<int, char>();
+                foreach (var item in Console.ReadLine().Split().ToArray())
+                {
+                    if (item == string.Empty) break;
+                    var letter = item[0];
+                    var index = item[1] - '0';
+                    greens.Add(index, letter);
+                }
+
+                wordClues.Add(greens, yellows, greys);
+
+            }
+
         }
 
         public static WordClues GenerateClues(WordClues currentClues, string guessWord, string computerWord)
