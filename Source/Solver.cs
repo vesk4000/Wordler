@@ -14,11 +14,11 @@ namespace Wordler
         public static string goal = "cigar";
 
         public static List<string> wordList = File.ReadAllText(@"..\..\..\wordlist.txt").Split(";").ToList();
-        public static Dictionary<char, double> letterProbability = JsonSerializer.Deserialize<Dictionary<char, double>>(File.ReadAllText(@"..\..\..\letterProbability.txt"));
-        public static Dictionary<string, double> wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
+        public static Dictionary<string, double> wordProbability;
 
         public static void EtoSolve()
         {
+            wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
             int guesses = 0;
             foreach (string goal in wordList)
             {
