@@ -11,12 +11,13 @@ namespace Wordler
 {
     public class Solver
     {
-        public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
+        public static List<string> wordList = File.ReadAllText(@"..\..\..\longwordlist.txt").Split(";").ToList();
         public static Dictionary<string, double> wordProbability;
 
         public static void EtoSolve()
         {
             wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
+            Dictionary<string, int> wordGuesses = new Dictionary<string, int>();
             int guesses = 0;
             int failed = 0;
             foreach (string goal in wordList)
@@ -32,11 +33,15 @@ namespace Wordler
                     guessCount++;
                 }
                 guesses += guessCount;
-                if (guessCount > 6) { failed++; Console.WriteLine(goal); }
-                Console.WriteLine($"{goal}: {guessCount}");
+                if (guessCount > 6) { failed++; wordGuesses.Add(guess, guessCount); }                
             }
             Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
             Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
+            wordGuesses = wordGuesses.OrderByDescending(e => e.Value).ToDictionary(e => e.Key, e => e.Value);
+            foreach (var item in wordGuesses)
+            {
+                Console.WriteLine($"{item.Key}: {item.Value}");
+            }
         }
 
         public static string InitSolve(List<WordClues> wordClues = null)

@@ -30,7 +30,11 @@ namespace Wordler
 
 		public bool Match(string word)
 		{
-			if(word == "cigar")
+            foreach (var yellow in Yellows)
+            {
+				if (!word.Contains(yellow.Item2)) return false;
+            }
+			if(word == "foyer")
             {
 				;
             }

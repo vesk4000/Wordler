@@ -74,12 +74,13 @@ namespace Wordler
             //		Thread.Sleep(1000);
             //	});*/
             CalculateProbabilities();
-            //Solver.EtoSolve();
-            Solver.GiveClues();
+            if(Console.ReadLine() == "1")Solver.EtoSolve();
+            else Solver.GiveClues();
         }
 
         private static void CalculateProbabilities()
         {
+            Dictionary<string, int> wordFrequency = JsonSerializer.Deserialize<Dictionary<string,int>>(File.ReadAllText(@"..\..\..\wordFrequency.txt"));
             int letterListCount = Solver.wordList.Count * 5;
             var wordlist = Solver.wordList;
             Dictionary<char, double> letterProbability = new Dictionary<char, double>();
@@ -94,12 +95,14 @@ namespace Wordler
             }
             letterProbability = letterProbability.OrderByDescending(e => e.Value).ToDictionary(e => e.Key, e => e.Value);
             Dictionary<string, double> wordProbability = new Dictionary<string, double>();
+            long wordFrequencySum = 570765890;
             foreach (var word in wordlist)
             {
                 double probability = 0;
                 foreach (var letter in string.Join("", word.ToCharArray().Distinct()))
                 {
                     probability += (letterProbability[letter] / Math.Log(letterProbability[letter]));
+                    
                 }
                 wordProbability.Add(word, -probability);
             }
