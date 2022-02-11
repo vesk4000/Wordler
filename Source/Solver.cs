@@ -39,6 +39,44 @@ namespace Wordler
             Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
         }
 
+        public static void IcySolve()
+        {
+            List<string> wordProbabilityList = new List<string>(); // wordProbability.Keys.ToList();
+            int guesses = 0;
+            int failed = 0;
+            
+            foreach (string goal in wordList)
+            {
+                Program.CalculateProbabilities(wordList);
+
+                wordProbabilityList = wordProbability.Keys.ToList();
+
+                WordClues wordClues = new WordClues();
+                int guessCount = 0;
+                string guess = string.Empty;
+
+                while (guess != goal)
+                {
+                    guess = wordProbability.First().Key;
+                    wordClues = GenerateClues(wordClues, guess, goal);
+                    
+                    guessCount++;
+
+                    wordProbabilityList.RemoveAll(e => !wordClues.Match(e));
+
+                    Program.CalculateProbabilities(wordProbabilityList);
+                }
+
+                guesses += guessCount;
+                
+                if (guessCount > 6) { failed++; Console.WriteLine(goal); }
+
+                Console.WriteLine($"{goal}: {guessCount}");
+            }
+            Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
+            Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
+        }
+
         public static string InitSolve(List<WordClues> wordClues = null)
         {
             OrderedDictionary wordsOrder = new OrderedDictionary();

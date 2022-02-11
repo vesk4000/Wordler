@@ -30,20 +30,31 @@ namespace Wordler
 
 		public bool Match(string word)
 		{
-			if(word == "cigar")
-            {
-				;
-            }
-			int index = 0;
+			int yellowsCount, greensCount;
+			int index;
+
+			index = yellowsCount = greensCount = 0;
+
 			foreach (char letter in word)
 			{
-				if (Greys.Contains(letter)) return false;
+				if (Greys.Contains(letter))
+					return false;
 
-				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter)) return false;
+				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter))
+					return false;
+				else if (Yellows.Any(e => e.Item2 == letter))
+					yellowsCount++;
 
-				if (Greens.Any(e => e.Key == index && e.Value != letter)) return false;
+				if (Greens.Any(e => e.Key == index && e.Value != letter))
+					return false;
+				else if (Greens.Any(e => e.Key == index && e.Value == letter))
+					greensCount++;
+
 				index++;
 			}
+
+			if (greensCount != Greens.Count)
+				return false;
 			
 			return true;
 		}
