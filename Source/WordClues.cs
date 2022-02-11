@@ -42,8 +42,6 @@ namespace Wordler
 
 				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter))
 					return false;
-				else if (Yellows.Any(e => e.Item2 == letter))
-					yellowsCount++;
 
 				if (Greens.Any(e => e.Key == index && e.Value != letter))
 					return false;
@@ -52,6 +50,10 @@ namespace Wordler
 
 				index++;
 			}
+
+			foreach (var yellowLetter in Yellows)
+				if (!word.Contains(yellowLetter.Item2))
+					return false;
 
 			if (greensCount != Greens.Count)
 				return false;
