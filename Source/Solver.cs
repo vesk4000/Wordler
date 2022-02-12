@@ -11,7 +11,7 @@ namespace Wordler
 {
     public class Solver
     {
-        public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
+        public static List<string> wordList = File.ReadAllText(@"..\..\..\longwordlist.txt").Split(";").ToList();
         public static Dictionary<string, double> wordProbability;
 
         public static void EtoSolve()
@@ -22,11 +22,11 @@ namespace Wordler
             int failed = 0;
             foreach (string goal in wordList)
             {
-                if (goal == "ionic") ;
+                if (goal == "eases") ;
                 WordClues wordClues = new WordClues();
                 int guessCount = 0;
                 string guess = string.Empty;
-                bool[] found = new bool[5];
+                bool[] found = new bool[goal.Length];
 
                 while (guess != goal)
                 {
@@ -37,9 +37,9 @@ namespace Wordler
                         found[green.Key] = true;
                     }
                     guessCount++;
-                    if (wordClues.Greens.Count >= 4) break;
+                    if (wordClues.Greens.Count >= (goal.Length - 1)) break;
                 }
-                if (wordClues.Greens.Count != 5)
+                if (wordClues.Greens.Count != goal.Length)
                 {
                     int remainingIndex = Array.IndexOf(found, false);
                     HashSet<char> remaining = wordProbability.Keys.Where(e => wordClues.Match(e)).Select(e => e[remainingIndex]).ToHashSet();
@@ -48,7 +48,7 @@ namespace Wordler
 
                     for (int i = 0; i < remaining.Count; i++)
                     {
-                        int index = i % 5;
+                        int index = i % goal.Length;
                         if (wordClues.Greens.ContainsValue(remaining.ElementAt(i)))
                         {
                             char temp = guessChar[remainingIndex];
@@ -64,7 +64,7 @@ namespace Wordler
                                 guessChar[index] = remaining.ElementAt(i);
                             }
                         }
-                        if (index == 4)
+                        if (index == goal.Length - 1)
                         {
                             guess = string.Join("", guessChar);
                             guess = TryMatch(wordClues, guess, goal, remainingIndex);
@@ -73,7 +73,7 @@ namespace Wordler
                     }
                     if (guessChar.Any(e => e != 0))
                     {
-                        if (guessChar.Count(e => e != 0) < 6 - guessCount)
+                        if (guessChar.Count(e => e != 0) <= 6 - guessCount)
                         {
                             foreach (var letter in guessChar.Where(e => e != 0))
                             {
@@ -115,10 +115,9 @@ namespace Wordler
 
         private static string TryMatch(WordClues wordClues, string guess, string goal, int remainingIndex)
         {
-            if (guess == "cicic") ;
             int yellowCount = wordClues.Yellows.Count();
             wordClues = GenerateClues(wordClues, guess, goal);
-            if (wordClues.Greens.Count == 5)
+            if (wordClues.Greens.Count == goal.Length)
             {
                 return GuessGreens(wordClues.Greens);
             }
@@ -220,6 +219,74 @@ namespace Wordler
                             }
                             wordClues.Add(greens, yellows, greys);
                             Array.Clear(guessChar, 0, guessChar.Length);
+                        }
+                        if (guessChar.Any(e => e != 0))
+                        {
+                            guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
+                            Console.WriteLine(guess);
+                            Console.Write("Enter Greys without spaces: ");
+                            HashSet<char> greys = Console.ReadLine().ToHashSet();
+                            Console.Write("Enter Yellows in format({letter}{position}): ");
+                            HashSet<Tuple<int, char>> yellows = new HashSet<Tuple<int, char>>();
+                            foreach (var item in Console.ReadLine().Split().ToArray())
+                            {
+                                if (item == string.Empty) break;
+                                var letter = item[0];
+                                if (!yellows.Contains(new Tuple<int, char>(item[1] - '0', letter)))
+                                {
+                                    wordClues.Greens.Add(item[1] - '0', letter);
+                                    Console.WriteLine(GuessGreens(wordClues.Greens));
+                                    return;
+                                }
+                            }
+                            Console.Write("Enter Greens in format({letter}{position}): ");
+                            Dictionary<int, char> greens = new Dictionary<int, char>();
+                            foreach (var item in Console.ReadLine().Split().ToArray())
+                            {
+                                if (item == string.Empty) break;
+                                if (!wordClues.Greens.ContainsKey(item[1] - '0'))
+                                {
+                                    wordClues.Greens.Add(item[1] - '0', item[0]);
+                                    Console.WriteLine(GuessGreens(wordClues.Greens));
+                                    return;
+                                }
+                            }
+                        }
+                        else if (wordClues.Greens.Count() != 5)
+                        {
+                            remaining = wordProbability.Keys.Where(e => wordClues.Match(e) && e[remainingIndex] != guess[remainingIndex]).Select(e => e[remainingIndex]).ToHashSet();
+                            var temp = guess.ToCharArray();
+                            temp[remainingIndex] = remaining.First();
+                            guess = string.Join("", temp);
+                            Console.WriteLine(guess);
+                            Console.Write("Enter Greys without spaces: ");
+                            HashSet<char> greys = Console.ReadLine().ToHashSet();
+                            Console.Write("Enter Yellows in format({letter}{position}): ");
+                            HashSet<Tuple<int, char>> yellows = new HashSet<Tuple<int, char>>();
+                            foreach (var item in Console.ReadLine().Split().ToArray())
+                            {
+                                if (item == string.Empty) break;
+                                var letter = item[0];
+                                if (!yellows.Contains(new Tuple<int, char>(item[1] - '0', letter)))
+                                {
+                                    wordClues.Greens.Add(item[1] - '0', letter);
+                                    Console.WriteLine(GuessGreens(wordClues.Greens));
+                                    return;
+                                }
+                            }
+                            Console.Write("Enter Greens in format({letter}{position}): ");
+                            Dictionary<int, char> greens = new Dictionary<int, char>();
+                            foreach (var item in Console.ReadLine().Split().ToArray())
+                            {
+                                if (item == string.Empty) break;
+                                if (!wordClues.Greens.ContainsKey(item[1] - '0'))
+                                {
+                                    wordClues.Greens.Add(item[1] - '0', item[0]);
+                                    Console.WriteLine(GuessGreens(wordClues.Greens));
+                                    return;
+                                }
+                            }
+
                         }
                     }
                 }
