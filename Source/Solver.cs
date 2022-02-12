@@ -11,7 +11,7 @@ namespace Wordler
 {
     public class Solver
     {
-        public static List<string> wordList = File.ReadAllText(@"..\..\..\longwordlist.txt").Split(";").ToList();
+        public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
         public static Dictionary<string, double> wordProbability;
 
         public static void EtoSolve()
@@ -22,7 +22,7 @@ namespace Wordler
             int failed = 0;
             foreach (string goal in wordList)
             {
-                if (goal == "water") ;
+                if (goal == "ionic") ;
                 WordClues wordClues = new WordClues();
                 int guessCount = 0;
                 string guess = string.Empty;
@@ -40,7 +40,7 @@ namespace Wordler
                     if (wordClues.Greens.Count >= 4) break;
                 }
                 if (wordClues.Greens.Count != 5)
-                {                    
+                {
                     int remainingIndex = Array.IndexOf(found, false);
                     HashSet<char> remaining = wordProbability.Keys.Where(e => wordClues.Match(e)).Select(e => e[remainingIndex]).ToHashSet();
                     remaining = remaining.OrderByDescending(e => Program.letterProbability[e]).ToHashSet();
@@ -72,9 +72,22 @@ namespace Wordler
                         }
                     }
                     if (guessChar.Any(e => e != 0))
-                    {                        
-                        guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
-                        guess = TryMatch(wordClues, guess, goal, remainingIndex);
+                    {
+                        if (guessChar.Count(e => e != 0) < 6 - guessCount)
+                        {
+                            foreach (var letter in guessChar.Where(e => e != 0))
+                            {
+                                guess = string.Concat(Enumerable.Repeat(string.Join("", letter), 5));
+                                guess = TryMatch(wordClues, guess, goal, remainingIndex);
+                            }
+                        }
+                        else
+                        {
+                            guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
+                            guess = TryMatch(wordClues, guess, goal, remainingIndex);
+                        }
+
+
                     }
                     else if (guess != goal)
                     {
@@ -101,7 +114,8 @@ namespace Wordler
         }
 
         private static string TryMatch(WordClues wordClues, string guess, string goal, int remainingIndex)
-        {            
+        {
+            if (guess == "cicic") ;
             int yellowCount = wordClues.Yellows.Count();
             wordClues = GenerateClues(wordClues, guess, goal);
             if (wordClues.Greens.Count == 5)
