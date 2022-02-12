@@ -10,17 +10,15 @@ using System.Collections;
 namespace Wordler
 {
     public class Solver
-    {
-        public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
-        public static Dictionary<string, double> wordProbability;
+    {        
+        public static Dictionary<string, double> wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
 
-        public static void EtoSolve()
+        public static void EtoSolve(List<string> guessList, List<string> goalList)
         {
-            wordProbability = JsonSerializer.Deserialize<Dictionary<string, double>>(File.ReadAllText(@"..\..\..\wordProbability.txt"));
             Dictionary<string, int> wordGuesses = new Dictionary<string, int>();
             int guesses = 0;
             int failed = 0;
-            foreach (string goal in wordList)
+            foreach (string goal in goalList)
             {               
                 WordClues wordClues = new WordClues();
                 int guessCount = 0;
@@ -110,8 +108,8 @@ namespace Wordler
                 if (guessCount > 6 || guess != goal) { failed++; wordGuesses.Add(goal, guessCount); }
                 //Console.WriteLine(goal);
             }
-            Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
-            Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
+            Console.WriteLine($"Average: {(double)((double)guesses / (double)goalList.Count)}");
+            Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)goalList.Count) * 100):F2}%");
             wordGuesses = wordGuesses.OrderByDescending(e => e.Value).ToDictionary(e => e.Key, e => e.Value);
             foreach (var item in wordGuesses)
             {

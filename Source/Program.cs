@@ -11,17 +11,19 @@ namespace Wordler
     class Program
     {
         public static Dictionary<char, double> letterProbability;
+        public static List<string> shortWordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
+        public static List<string> longWordList = File.ReadAllText(@"..\..\..\longwordlist.txt").Split(";").ToList();
         static void Main(string[] args)
         {            
-            CalculateProbabilities();
-            if(Console.ReadLine() == "1")Solver.EtoSolve();
+            CalculateProbabilities(shortWordList);
+            if(Console.ReadLine() == "1") Solver.EtoSolve(shortWordList, shortWordList);
             else Solver.GiveClues();
         }
 
-        private static void CalculateProbabilities()
+        private static void CalculateProbabilities(List<string> wordList)
         {
-            int letterListCount = Solver.wordList.Count * 5;
-            var wordlist = Solver.wordList;
+            int letterListCount = wordList.Count * 5;
+            var wordlist = wordList;
             letterProbability = new Dictionary<char, double>();
             for (char i = 'a'; i <= 'z'; ++i)
             {
