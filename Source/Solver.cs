@@ -11,7 +11,7 @@ namespace Wordler
 {
     public class Solver
     {
-        public static List<string> wordList = File.ReadAllText(@"..\..\..\longwordlist.txt").Split(";").ToList();
+        public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
         public static Dictionary<string, double> wordProbability;
 
         public static void EtoSolve()
@@ -21,8 +21,7 @@ namespace Wordler
             int guesses = 0;
             int failed = 0;
             foreach (string goal in wordList)
-            {
-                if (goal == "eases") ;
+            {               
                 WordClues wordClues = new WordClues();
                 int guessCount = 0;
                 string guess = string.Empty;
@@ -73,7 +72,14 @@ namespace Wordler
                     }
                     if (guessChar.Any(e => e != 0))
                     {
-                        if (guessChar.Count(e => e != 0) <= 6 - guessCount)
+                        if (guessChar.Count(e => e != 0) == 1)
+                        {
+                            var temp = guess.ToCharArray();
+                            temp[remainingIndex] = guessChar.First(e => e != 0);
+                            guess = string.Join("", temp);
+                            guess = TryMatch(wordClues, guess, goal, remainingIndex);
+                        }                        
+                        else if (guessChar.Count(e => e != 0) <= 6 - guessCount)
                         {
                             foreach (var letter in guessChar.Where(e => e != 0))
                             {
@@ -222,7 +228,13 @@ namespace Wordler
                         }
                         if (guessChar.Any(e => e != 0))
                         {
-                            guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
+                            if (guessChar.Count(e => e != 0) == 1)
+                            {
+                                var temp = guess.ToCharArray();
+                                temp[remainingIndex] = guessChar.First(e => e != 0);
+                                guess = string.Join("", temp);
+                            }
+                            else guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
                             Console.WriteLine(guess);
                             Console.Write("Enter Greys without spaces: ");
                             HashSet<char> greys = Console.ReadLine().ToHashSet();
