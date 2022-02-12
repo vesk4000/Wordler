@@ -22,6 +22,7 @@ namespace Wordler
             int failed = 0;
             foreach (string goal in wordList)
             {
+                if (goal == "water") ;
                 WordClues wordClues = new WordClues();
                 int guessCount = 0;
                 string guess = string.Empty;
@@ -39,8 +40,7 @@ namespace Wordler
                     if (wordClues.Greens.Count >= 4) break;
                 }
                 if (wordClues.Greens.Count != 5)
-                {
-                    if (goal == "anele") ;
+                {                    
                     int remainingIndex = Array.IndexOf(found, false);
                     HashSet<char> remaining = wordProbability.Keys.Where(e => wordClues.Match(e)).Select(e => e[remainingIndex]).ToHashSet();
                     remaining = remaining.OrderByDescending(e => Program.letterProbability[e]).ToHashSet();
@@ -49,7 +49,7 @@ namespace Wordler
                     for (int i = 0; i < remaining.Count; i++)
                     {
                         int index = i % 5;
-                        if (index == 0 && wordClues.Greens.ContainsValue(remaining.ElementAt(i)))
+                        if (wordClues.Greens.ContainsValue(remaining.ElementAt(i)))
                         {
                             char temp = guessChar[remainingIndex];
                             guessChar[index] = temp;
@@ -72,29 +72,36 @@ namespace Wordler
                         }
                     }
                     if (guessChar.Any(e => e != 0))
-                    {
+                    {                        
                         guess = string.Concat(Enumerable.Repeat(string.Join("", guessChar.Where(e => e != 0)), 5)).Substring(0, 5);
                         guess = TryMatch(wordClues, guess, goal, remainingIndex);
+                    }
+                    else if (guess != goal)
+                    {
+                        remaining = wordProbability.Keys.Where(e => wordClues.Match(e) && e[remainingIndex] != guess[remainingIndex]).Select(e => e[remainingIndex]).ToHashSet();
+                        var temp = guess.ToCharArray();
+                        temp[remainingIndex] = remaining.First();
+                        guess = string.Join("", temp);
+                        guess = TryMatch(wordClues, guess, goal, remainingIndex);
+
                     }
 
                 }
                 guesses += guessCount;
                 if (guessCount > 6 || guess != goal) { failed++; wordGuesses.Add(goal, guessCount); }
                 //Console.WriteLine(goal);
-                if (goal == "aloin") ;
             }
             Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
             Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
             wordGuesses = wordGuesses.OrderByDescending(e => e.Value).ToDictionary(e => e.Key, e => e.Value);
             foreach (var item in wordGuesses)
             {
-                //Console.WriteLine($"{item.Key}: {item.Value}");
+                Console.WriteLine($"{item.Key}: {item.Value}");
             }
         }
 
         private static string TryMatch(WordClues wordClues, string guess, string goal, int remainingIndex)
-        {
-            if (guess == "kokok") ;
+        {            
             int yellowCount = wordClues.Yellows.Count();
             wordClues = GenerateClues(wordClues, guess, goal);
             if (wordClues.Greens.Count == 5)
@@ -103,12 +110,13 @@ namespace Wordler
             }
             if (wordClues.Yellows.Count > yellowCount)
             {
+                if (wordClues.Yellows.Count(e => !wordClues.Greens.ContainsValue(e.Item2)) == 0) return guess;
                 var temp = new Dictionary<int, char>();
-                temp.Add(remainingIndex, wordClues.Yellows.Last().Item2);
+                temp.Add(remainingIndex, wordClues.Yellows.FirstOrDefault(e => !wordClues.Greens.ContainsValue(e.Item2)).Item2);
                 wordClues.Add(temp, new HashSet<Tuple<int, char>>(), new HashSet<char>());
                 return GuessGreens(wordClues.Greens);
             }
-            return string.Empty;
+            return guess;
         }
 
         public static void GiveClues()
