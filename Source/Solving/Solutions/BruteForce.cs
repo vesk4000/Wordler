@@ -11,7 +11,7 @@ namespace wordler {
 
 		public override void GradeWords() {
 			foreach(string gradeableWord in gradeableWords) {
-				if(0 == Interlocked.Exchange(ref updateLock, 1)) {
+				lock(updateLock) {
 					double sumReductions = 0;
 
 					foreach (string potentialComputerWord in potentialComputerWords) {
@@ -31,8 +31,6 @@ namespace wordler {
 					double avgReduction = sumReductions / potentialComputerWords.Count;
 
 					CacheGradedWord(gradeableWord, avgReduction);
-
-					Interlocked.Exchange(ref updateLock, 0);
 				}
 			}
 		}

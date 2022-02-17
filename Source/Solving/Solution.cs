@@ -9,8 +9,8 @@ namespace wordler {
 		public List<string> gradeableWords;
 		public List<string> potentialComputerWords;
 		private List<(string word, double grade)> cache = new List<(string word, double grade)>();
-		private int usingCache = 0;
-		protected int updateLock = 0;
+		private object usingCache = new Object();
+		protected object updateLock = new Object();
 		public Solver solver;
 
 		private Thread solution;
@@ -31,13 +31,11 @@ namespace wordler {
 		private void ContinuouslyAddGradedWords() {
 			bool endFlag = false;
 			while(!endFlag) {
-				if (0 == Interlocked.Exchange(ref updateLock, 1)) {
-					Interlocked.Exchange(ref updateLock, 0);
-				}
+				lock(updateLock) { }
 
-				if(0 == Interlocked.Exchange(ref solver.usingGradedWords, 1)) {
+				lock(solver.usingGradedWords) {
 
-					if(0 == Interlocked.Exchange(ref usingCache, 1)) {
+					lock(usingCache) {
 						/*if (cache.Count == 0)
 							endFlag = true;*/
 
@@ -45,21 +43,14 @@ namespace wordler {
 							solver.gradedWords.Add(cachedGradedWord.grade, cachedGradedWord.word);
 						}
 						cache.Clear();
-
-						Interlocked.Exchange(ref usingCache, 0);
 					}
-
-
-					Interlocked.Exchange(ref solver.usingGradedWords, 0);
 				}
 			}
 		}
 		
 		protected void CacheGradedWord(string word, double grade) {
-			if(0 == Interlocked.Exchange(ref usingCache, 1)) {
+			lock (usingCache) {
 				cache.Add((word, grade));
-
-				Interlocked.Exchange(ref usingCache, 0);
 			}
 		}
 	}

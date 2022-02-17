@@ -14,7 +14,7 @@ namespace wordler
 		public SortedList<double, string> gradedWords
 			= new SortedList<double, string>(new DuplicateKeyComparer<double>());
 		// A thread lock for gradedWords
-		public int usingGradedWords = 0;
+		public object usingGradedWords = new Object();
 
 		private int topResultsToDisplay;
 
@@ -39,7 +39,7 @@ namespace wordler
 			currentResult = "wordl";
 			chartElements = new List<(string, double)>();
 
-			if (0 == Interlocked.Exchange(ref usingGradedWords, 1)) {
+			lock(usingGradedWords) {
 				int i = 0;
 				foreach (KeyValuePair<double, string> pair in gradedWords) {
 					if (i > topResultsToDisplay)
@@ -47,14 +47,12 @@ namespace wordler
 					chartElements.Add((pair.Value, pair.Key));
 					++i;
 				}
-
-				Interlocked.Exchange(ref usingGradedWords, 0);
 			}
 			
 		}
 
 		public void AddWord(string word, double grade) {
-			if(0 == Interlocked.Exchange(ref usingGradedWords, 1)) {
+			lock(usingGradedWords) {
 				gradedWords.Add(grade, word);
 
 				Interlocked.Exchange(ref usingGradedWords, 0);
