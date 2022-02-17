@@ -54,9 +54,13 @@ namespace wordler
 						(element) => new BarChartItem(element.Label, element.Value)
 					);
 
-					leaderboardTable.UpdateCell(0, 0, leaderboardChart);
 
-			ctx.Refresh();
+					if (chartElements.Count > 0)
+						leaderboardTable.UpdateCell(0, 0, leaderboardChart);
+					else
+						leaderboardTable.UpdateCell(0, 0, new Markup(""));
+
+					ctx.Refresh();
 
 					// TODO: Fix fps timings to take into account time spent doing the operations
 					Thread.Sleep(1000 / fps);
