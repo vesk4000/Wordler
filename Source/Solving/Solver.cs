@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.IO;
 
 namespace wordler
 {
@@ -18,12 +19,34 @@ namespace wordler
 
 		private int topResultsToDisplay;
 
-		private BruteForce solutions;
+		private string wordListPath;
 
-		public Solver(int topResultsToDisplay = 10) {
+		public bool hard;
+
+		private int numThreads;
+
+		private List<Solution> solutions;
+
+		public Solver(bool hard, string wordListPath, int topResultsToDisplay, int numThreads) {
+			this.hard = hard;
+			this.wordListPath = wordListPath;
 			this.topResultsToDisplay = topResultsToDisplay;
-			List<string> words = new List<string> { "apple", "crook", "brook", "books", "qwert"};
-			solutions = new BruteForce(this, words, words);
+			this.numThreads = numThreads;
+
+			List<string> words = File.ReadAllLines(wordListPath).ToList();
+
+			List<IEnumerable<string>> wordsChunkedEnumerable = words.Chunk(numThreads).ToList();
+			List<List<string>> wordsChunked = new List<List<string>>();
+
+			foreach(IEnumerable<string> chunk in wordsChunkedEnumerable) {
+				wordsChunked.Add(chunk.ToList());
+			}
+			
+
+			solutions = new List<Solution>();
+			for(int i = 0; i < numThreads; ++i) {
+				solutions.Add(new BruteForce(this, wordsChunked[i], words));
+			}
 		}
 
 		public void Poll(
@@ -42,7 +65,7 @@ namespace wordler
 			lock(usingGradedWords) {
 				int i = 0;
 				foreach (KeyValuePair<double, string> pair in gradedWords) {
-					if (i > topResultsToDisplay)
+					if (i >= topResultsToDisplay)
 						break;
 					chartElements.Add((pair.Value, pair.Key));
 					++i;

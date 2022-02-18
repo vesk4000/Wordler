@@ -33,41 +33,41 @@ namespace wordler
 			leaderboardTable.AddRow(leaderboardChart);
 			masterTable.AddRow(leaderboardTable);
 
+			var pos = Console.GetCursorPosition();
+
+			while(true) {
+				AnsiConsole.Cursor.Hide();
+				int partsTotal, partsDone;
+				string[] footnotes;
+				TResult currentResult;
+				List<(string Label, double Value)> chartElements;
+
+				taskedObject.Poll(out partsTotal, out partsDone, out chartElements, out footnotes, out currentResult);
+
+				statusTable.Rows.Update(0, 0, new Markup("Uptime: " + upTimer.Elapsed));
+
+				leaderboardChart = new BarChart();
+
+				leaderboardChart.AddItems(
+					chartElements,
+					(element) => new BarChartItem(element.Label, element.Value)
+				);
 
 
-			AnsiConsole.Live(masterTable).Start(ctx => {
-				while (true)
-				{
-					int partsTotal, partsDone;
-					string[] footnotes;
-					TResult currentResult;
-					List<(string Label, double Value)> chartElements;
+				if(chartElements.Count > 0)
+					leaderboardTable.UpdateCell(0, 0, leaderboardChart);
+				else
+					leaderboardTable.UpdateCell(0, 0, new Markup(""));
+				masterTable.Border(TableBorder.None);
+				
+				AnsiConsole.Write(masterTable);
+				AnsiConsole.Cursor.SetPosition(pos.Left, pos.Top + 1);
 
-					taskedObject.Poll(out partsTotal, out partsDone, out chartElements, out footnotes, out currentResult);
+				// TODO: Fix fps timings to take into account time spent doing the operations
+				Thread.Sleep(1000 / fps);
+			}
 
-					statusTable.Rows.Update(0, 0, new Markup("Uptime: " + upTimer.Elapsed));
-
-					leaderboardChart = new BarChart();
-
-					leaderboardChart.AddItems(
-						chartElements,
-						(element) => new BarChartItem(element.Label, element.Value)
-					);
-
-
-					if (chartElements.Count > 0)
-						leaderboardTable.UpdateCell(0, 0, leaderboardChart);
-					else
-						leaderboardTable.UpdateCell(0, 0, new Markup(""));
-
-					ctx.Refresh();
-
-					// TODO: Fix fps timings to take into account time spent doing the operations
-					Thread.Sleep(1000 / fps);
-				}
-			});
-
-			
+			AnsiConsole.Cursor.Show();
 		}
 	}
 }

@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "wordler": {
+      "commandName": "Project",
+      "commandLineArgs": "-g a1b2 -y c3 -r de"
+    }
+  }
+}
