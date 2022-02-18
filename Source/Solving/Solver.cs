@@ -13,7 +13,7 @@ namespace wordler
 		// Prolly gonna do that with a generic in the Solver
 		// So something like Solver<TComparer> : ITaskable<string> where TComparer : IComparer
 		public SortedList<double, string> gradedWords
-			= new SortedList<double, string>(new DuplicateKeyComparer<double>());
+			= new SortedList<double, string>(new DuplicateKeyComparerDescending<double>());
 		// A thread lock for gradedWords
 		public object usingGradedWords = new Object();
 
@@ -25,13 +25,27 @@ namespace wordler
 
 		private int numThreads;
 
+		public WordClues wordClues;
+
 		private List<Solution> solutions;
 
-		public Solver(bool hard, string wordListPath, int topResultsToDisplay, int numThreads) {
+		public Solver(
+			bool hard,
+			string wordListPath,
+			int topResultsToDisplay,
+			int numThreads,
+			WordClues wordClues,
+			Type solution
+		) {
 			this.hard = hard;
 			this.wordListPath = wordListPath;
 			this.topResultsToDisplay = topResultsToDisplay;
 			this.numThreads = numThreads;
+			this.wordClues = wordClues;
+
+			var customAttributes = (KeyComparerAttribute[])solution.GetCustomAttributes(typeof(KeyComparerAttribute), true);
+			var comparerAttribute = customAttributes[0];
+			gradedWords = new SortedList<double, string>((IComparer<double>)Activator.CreateInstance(comparerAttribute.KeyComparer));
 
 			List<string> words = File.ReadAllLines(wordListPath).ToList();
 
@@ -45,7 +59,7 @@ namespace wordler
 
 			solutions = new List<Solution>();
 			for(int i = 0; i < numThreads; ++i) {
-				solutions.Add(new BruteForce(this, wordsChunked[i], words));
+				solutions.Add(new BruteForce(this, wordsChunked[i], words, wordClues));
 			}
 		}
 

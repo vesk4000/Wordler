@@ -13,15 +13,18 @@ namespace wordler {
 		protected object updateLock = new Object();
 		public Solver solver;
 
+		protected WordClues wordClues;
+
 		private Thread solution;
 		private Thread cacher;
 
 		public abstract void GradeWords();
 
-		public Solution(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords) {
+		public Solution(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues) {
 			this.solver = solver;
 			this.gradeableWords = gradeableWords;
 			this.potentialComputerWords = potentialComputerWords;
+			this.wordClues = wordClues;
 			cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
 			cacher.Start();
 			solution = new Thread(new ThreadStart(GradeWords));

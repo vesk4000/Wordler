@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading;
 
 namespace wordler {
+	[KeyComparer(typeof(DuplicateKeyComparerAscending<double>))]
 	class BruteForce : Solution {
-		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords)
-			: base(solver, gradeableWords, potentialComputerWords) { }
+		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues)
+			: base(solver, gradeableWords, potentialComputerWords, wordClues) { }
 
 		public override void GradeWords() {
 			foreach(string gradeableWord in gradeableWords) {
@@ -15,12 +16,14 @@ namespace wordler {
 					double sumReductions = 0;
 
 					foreach (string potentialComputerWord in potentialComputerWords) {
+						if (!wordClues.Match(potentialComputerWord))
+							continue;
 
-						WordClues wordClues = new WordClues(gradeableWord, potentialComputerWord);
+						WordClues tempWordClues = new WordClues(gradeableWord, potentialComputerWord) + wordClues;
 						int numReducedWords = 0;
 
 						foreach (string computerWord in potentialComputerWords) {
-							if (!wordClues.Match(computerWord))
+							if (!tempWordClues.Match(computerWord))
 								++numReducedWords;
 						}
 

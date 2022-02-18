@@ -51,6 +51,8 @@ namespace wordler {
 		[DefaultValue("")]
 		public string Clues { get; set; }
 
+		public WordClues wordClues;
+
 		public override ValidationResult Validate() {
 
 			if(!File.Exists(WordList) && !File.Exists(Directory.GetCurrentDirectory() + "/" + WordList))
@@ -97,6 +99,8 @@ namespace wordler {
 
 			if(!wordClues.IsValid())
 				return ValidationResult.Error("Incompatible word clues");
+
+			this.wordClues = wordClues;
 
 			return ValidationResult.Success();
 		}

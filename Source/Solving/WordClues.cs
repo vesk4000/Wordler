@@ -13,6 +13,8 @@ namespace wordler
 		public HashSet<(int Position, char Letter)> Yellows = new HashSet<(int, char)>();
 		public HashSet<char> Greys = new HashSet<char>();
 
+		public WordClues() { }
+
 		public WordClues(Dictionary<int, char> inputGreens,
 						 HashSet<(int, char)> inputYellows,
 						 HashSet<char> inputGreys)
@@ -151,43 +153,61 @@ namespace wordler
 			}
 		}
 
+		public WordClues(WordClues wordClues)
+		{
+			this.Greens = new Dictionary<int, char>(wordClues.Greens);
+			this.Yellows = new HashSet<(int Position, char Letter)>(wordClues.Yellows);
+			this.Greys = new HashSet<char>(wordClues.Greys);
+		}
+
 		public static WordClues operator+(WordClues a, WordClues b) {
+			WordClues b1 = new WordClues(b);
+
 			foreach(var green in a.Greens)
-				if(!b.Greens.Contains(green))
-					b.Greens.Add(green.Key, green.Value);
+				if(!b1.Greens.Contains(green))
+					b1.Greens.Add(green.Key, green.Value);
 
 			foreach(var yellow in a.Yellows)
-				if(!b.Yellows.Contains(yellow))
-					b.Yellows.Add(yellow);
+				if(!b1.Yellows.Contains(yellow))
+					b1.Yellows.Add(yellow);
 
 			foreach(var grey in a.Greys)
-				if(!b.Greys.Contains(grey))
-					b.Greys.Add(grey);
+				if(!b1.Greys.Contains(grey))
+					b1.Greys.Add(grey);
 
-			return b;
+			return b1;
 		}
 
 		public bool Match(string word)
 		{
-			foreach (var yellow in Yellows)
-			{
-				if (!word.Contains(yellow.Item2)) return false;
-			}
-			if(word == "foyer")
-			{
-				;
-			}
-			int index = 0;
+			int yellowsCount, greensCount;
+			int index;
+
+			index = yellowsCount = greensCount = 0;
+
 			foreach (char letter in word)
 			{
-				if (Greys.Contains(letter)) return false;
+				if (Greys.Contains(letter))
+					return false;
 
-				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter)) return false;
+				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter))
+					return false;
 
-				if (Greens.Any(e => e.Key == index && e.Value != letter)) return false;
+				if (Greens.Any(e => e.Key == index && e.Value != letter))
+					return false;
+				else if (Greens.Any(e => e.Key == index && e.Value == letter))
+					greensCount++;
+
 				index++;
 			}
-			
+
+			foreach (var yellowLetter in Yellows)
+				if (!word.Contains(yellowLetter.Item2))
+					return false;
+
+			if (greensCount != Greens.Count)
+				return false;
+
 			return true;
 		}
 

@@ -20,7 +20,14 @@ namespace wordler {
 			Console.WriteLine(settings.WordList);
 
 			var task = new LiveTask<string, Solver>();
-			task.Run(new Solver(settings.Hard, settings.WordList, settings.LeaderboardLength, settings.Threads));
+			task.Run(new Solver(
+				settings.Hard,
+				settings.WordList,
+				settings.LeaderboardLength,
+				settings.Threads,
+				settings.wordClues,
+				typeof(BruteForce)
+			));
 
 			return 0;
 		}
