@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wordler {
+namespace Wordler {
 	class KeyComparerAttribute : Attribute {
 		public Type KeyComparer { get; set; }
 

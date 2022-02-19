@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.IO;
 
-namespace wordler
+namespace Wordler
 {
 	class Solver : ITaskable<string> {
 		// TODO: Implement ability to sort the list in multiple ways

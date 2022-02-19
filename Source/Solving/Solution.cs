@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace wordler {
+namespace Wordler {
 	abstract class Solution {
 		public List<string> gradeableWords;
 		public List<string> potentialComputerWords;

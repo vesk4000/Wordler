@@ -8,7 +8,7 @@ using Spectre.Console;
 using System.Diagnostics;
 using System.Threading;
 
-namespace wordler
+namespace Wordler
 {
 	class LiveTask<TResult, TTask> where TTask : ITaskable<TResult>
 	{

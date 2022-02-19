@@ -1,1 +1,1 @@
-# wordler
+# Wordler

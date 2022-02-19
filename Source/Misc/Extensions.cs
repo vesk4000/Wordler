@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wordler {
+namespace Wordler {
 	static class Extensions {
 		// credit: youtu.be/sIXKpyhxHR8
 		public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> enumerable, int chunks) {

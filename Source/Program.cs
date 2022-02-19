@@ -7,7 +7,7 @@ using System.Text.Json;
 using System.IO;
 using Spectre.Console.Cli;
 
-namespace wordler
+namespace Wordler
 {
 	class Program
 	{

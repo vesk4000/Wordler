@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace wordler {
+namespace Wordler {
 	[KeyComparer(typeof(DuplicateKeyComparerAscending<double>))]
 	class BruteForce : Solution {
 		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues)

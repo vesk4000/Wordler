@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace wordler
+namespace Wordler
 {
 	// credit: https://stackoverflow.com/a/21886340
 	public class DuplicateKeyComparerDescending<TKey> : IComparer<TKey> where TKey : IComparable

@@ -9,7 +9,7 @@ using Spectre.Console.Cli;
 using System.Threading;
 using System.Diagnostics;
 
-namespace wordler {
+namespace Wordler {
 	class SolveCommand : Command<SolveCommand.Settings> {
 		public class Settings : AppSettings {
 

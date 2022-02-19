@@ -8,7 +8,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System.IO;
 
-namespace wordler {
+namespace Wordler {
 	class AppSettings : CommandSettings {
 
 		[Description("Only words that match the current clues can be guessed")]

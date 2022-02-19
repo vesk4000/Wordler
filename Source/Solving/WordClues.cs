@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 
-namespace wordler
-{
+namespace Wordler{
 	public class WordClues
 	{
 		public Dictionary<int, char> Greens = new Dictionary<int, char>();
