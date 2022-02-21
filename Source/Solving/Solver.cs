@@ -10,7 +10,7 @@ namespace Wordler
 {
 	class Solver : ITaskable<string> {
 		public SortedList<double, string> gradedWords
-			= new SortedList<double, string>(new DuplicateKeyComparerDescending<double>());
+			= new SortedList<double, string>(new DuplicateKeyComparerAscending<double>());
 
 		// A thread lock for gradedWords
 		public object usingGradedWords = new Object();
@@ -112,7 +112,7 @@ namespace Wordler
 				foreach (KeyValuePair<double, string> pair in gradedWords) {
 					if (i >= topResultsToDisplay)
 						break;
-					chartElements.Add((pair.Value, pair.Key));
+					chartElements.Add(((i + 1).ToString() + ". " + pair.Value, pair.Key));
 					++i;
 				}
 			}

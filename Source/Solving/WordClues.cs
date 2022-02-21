@@ -204,8 +204,8 @@ namespace Wordler{
 				char letter = word[i];
 				if(greys[letter - 'a'])
 					return false;
-				if(Greys.Contains(letter))
-					return false;
+				/*if(Greys.Contains(letter))
+					return false;*/
 				if(Yellows.Contains((i, letter)))
 					return false;
 			}

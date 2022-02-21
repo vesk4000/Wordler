@@ -6,11 +6,16 @@ using System.Threading;
 
 namespace Wordler {
 	[SolutionNames("bruteforce|brute-force")]
-	[KeyComparer(typeof(DuplicateKeyComparerAscending<double>))]
+	[KeyComparer(typeof(DuplicateKeyComparerDescending<double>))]
 	class BruteForce : Solution {
 		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard)
 			: base(solver, gradeableWords, potentialComputerWords, wordClues, hard) { }
 
+		// gradeableWords
+		// potentialComputerWords
+		// hard
+		// wordClues
+		// CacheGradedWord(string gradeableWord, double grade);
 		public override void GradeWords() {
 			foreach(string gradeableWord in gradeableWords) {
 				lock(updateLock) {

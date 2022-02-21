@@ -64,12 +64,11 @@ namespace Wordler {
 			lock(solver.usingGradedWords) {
 				solver.gradedWords.Add(grade, word);
 				if(wordClues.IsEmpty())
-					Cacher.AddCache(cache);
+					Cacher.AddCache(new List<(string Key, double Value)> { (word, grade) });
 			}
-			return;
-			lock (usingCache) {
+			/*lock (usingCache) {
 				cache.Add((word, grade));
-			}
+			}*/
 		}
 	}
 }

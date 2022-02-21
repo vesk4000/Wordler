@@ -14,7 +14,7 @@ namespace Wordler
 	{
 		public void Run(ITaskable<TResult> taskedObject, int fps = 10)
 		{
-			Color accent = new Color(95,215,215); //0,215,175 | 0,255,135
+			Color accent = new Color(155, 215, 155); //0,215,175 | 0,255,135 | 95,215,215
 
 			var masterTable = new Table();
 			masterTable.Width = 100;
@@ -97,9 +97,11 @@ namespace Wordler
 
 				leaderboardChart = new BarChart();
 
+
+
 				leaderboardChart.AddItems(
 					chartElements,
-					(element) => new BarChartItem(element.Label, element.Value)
+					(element) => new BarChartItem(element.Label, element.Value, getAccent())
 				);
 
 				var leaderboardPanelWithContents = new Panel(leaderboardChart);
@@ -118,17 +120,64 @@ namespace Wordler
 				masterTable.UpdateCell(1, 0, leaderboardPanel);
 
 				masterTable.Border(TableBorder.None);
-				
+
+				masterTable.UpdateCell(0, 0, statusPanel);
+					
+				if (leaderboardPanel == leaderboardPanelWithoutContents)
+					masterTable.UpdateCell(1, 0, new Markup(""));
+				if (upTimer.ElapsedMilliseconds < 300)
+					masterTable.UpdateCell(0, 0, new Markup(""));
+
 				AnsiConsole.Write(masterTable);
 
 				if(partsTotal == partsDone)
 					break;
 
-				// TODO: Fix fps timings to take into account time spent doing the operations
 				Thread.Sleep(1000 / fps);
 			}
 
 			AnsiConsole.Cursor.Show();
+		}
+
+		private bool num = true;
+		private Color[] accents = new Color[] { new Color(155, 215, 155), new Color(215, 215, 215) };
+
+		private Random rng = new Random();
+
+		private Color RngColor()
+		{
+			return ColorFromHSV(rng.Next(0, 360), 0.5, 0.8);
+		}
+
+		private Color getAccent()
+		{
+			num = !num;
+			return accents[num ? 1 : 0];
+		}
+
+		public static Color ColorFromHSV(double hue, double saturation, double value)
+		{
+			int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
+			double f = hue / 60 - Math.Floor(hue / 60);
+
+			value = value * 255;
+			int v = Convert.ToInt32(value);
+			int p = Convert.ToInt32(value * (1 - saturation));
+			int q = Convert.ToInt32(value * (1 - f * saturation));
+			int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
+
+			if (hi == 0)
+				return new Color((byte)v, (byte)t, (byte)p);
+			else if (hi == 1)
+				return new Color((byte)q, (byte)v, (byte)p);
+			else if (hi == 2)
+				return new Color((byte)p, (byte)v, (byte)t);
+			else if (hi == 3)
+				return new Color((byte)p, (byte)q, (byte)v);
+			else if (hi == 4)
+				return new Color((byte)t, (byte)p, (byte)v);
+			else
+				return new Color((byte)v, (byte)p, (byte)q);
 		}
 	}
 }
