@@ -13,7 +13,9 @@ namespace Wordler
 			out int partTotal,
 			out List<(string Label, double Value)> chartElements,
 			out string[] footnotes,
-			out T currentResult
+			out T currentResult,
+			out Type solution,
+			out bool hard
 		);
 	}
 }

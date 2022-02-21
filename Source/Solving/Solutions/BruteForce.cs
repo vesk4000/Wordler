@@ -5,33 +5,53 @@ using System.Text;
 using System.Threading;
 
 namespace Wordler {
+	[SolutionNames("bruteforce|brute-force")]
 	[KeyComparer(typeof(DuplicateKeyComparerAscending<double>))]
 	class BruteForce : Solution {
-		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues)
-			: base(solver, gradeableWords, potentialComputerWords, wordClues) { }
+		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard)
+			: base(solver, gradeableWords, potentialComputerWords, wordClues, hard) { }
 
 		public override void GradeWords() {
 			foreach(string gradeableWord in gradeableWords) {
 				lock(updateLock) {
 					double sumReductions = 0;
 
+					if(hard && !wordClues.Match(gradeableWord))
+						continue;
+
+					int numPotCompWords = potentialComputerWords.Count;
+
 					foreach (string potentialComputerWord in potentialComputerWords) {
-						if (!wordClues.Match(potentialComputerWord))
+						if (!wordClues.Match(potentialComputerWord)) {
+							--numPotCompWords;
 							continue;
+						}
 
 						WordClues tempWordClues = new WordClues(gradeableWord, potentialComputerWord) + wordClues;
 						int numReducedWords = 0;
+						int numReducableWords = 0;
 
 						foreach (string computerWord in potentialComputerWords) {
-							if (!tempWordClues.Match(computerWord))
-								++numReducedWords;
+							if(wordClues.Match(computerWord)) {
+								++numReducableWords;
+								if(!tempWordClues.Match(computerWord)) {
+									++numReducedWords;
+								}
+							}
+								
 						}
 
-						double reduction = (double)numReducedWords / potentialComputerWords.Count;
+						if(wordClues.Match(gradeableWord)) {
+							++numReducableWords;
+							++numReducedWords;
+						}
+						double reduction = 0;
+						if(numReducableWords != 0)
+							reduction = (double)numReducedWords / numReducableWords;
 						sumReductions += reduction;
 					}
 
-					double avgReduction = sumReductions / potentialComputerWords.Count;
+					double avgReduction = (double)sumReductions / numPotCompWords;
 
 					CacheGradedWord(gradeableWord, avgReduction);
 				}

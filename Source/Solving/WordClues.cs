@@ -100,7 +100,7 @@ namespace Wordler{
 			Dictionary<char, int> yellowChecker = new Dictionary<char, int>();
 
 			foreach(var yellow in Yellows) {
-				if(Greens[yellow.Position] == yellow.Letter)
+				if(Greens.ContainsKey(yellow.Position) && Greens[yellow.Position] == yellow.Letter)
 					return false;
 				if(!yellowChecker.ContainsKey(yellow.Letter))
 					yellowChecker[yellow.Letter] = 1;
@@ -137,16 +137,17 @@ namespace Wordler{
 				else {
 					if(clue[0] == 'g') {
 						if(!Greens.ContainsKey(curr - 1))
-							Greens.Add(curr - 1, letters.Dequeue());
+							Greens.Add(curr - 1, letters.Peek());
 					}
 					else if(clue[0] == 'y') {
-						if(!Yellows.Contains((curr - 1, letters.Dequeue())))
-							Yellows.Add((curr - 1, letters.Dequeue()));
+						if(!Yellows.Contains((curr - 1, letters.Peek())))
+							Yellows.Add((curr - 1, letters.Peek()));
 					}
 					else if(clue[0] == 'r') {
 						if(!Greys.Contains(letters.Peek()))
-							Greys.Add(letters.Dequeue());
+							Greys.Add(letters.Peek());
 					}
+					letters.Dequeue();
 				}
 			}
 		}
@@ -158,9 +159,13 @@ namespace Wordler{
 			this.Greys = new HashSet<char>(wordClues.Greys);
 		}
 
+		public bool IsEmpty() {
+			return Greens.Count == 0 && Yellows.Count == 0 && Greys.Count == 0;
+		}
+
 		public static WordClues operator+(WordClues a, WordClues b) {
 			WordClues b1 = new WordClues(b);
-
+			b1.cached = false;
 			foreach(var green in a.Greens)
 				if(!b1.Greens.Contains(green))
 					b1.Greens.Add(green.Key, green.Value);
@@ -176,35 +181,40 @@ namespace Wordler{
 			return b1;
 		}
 
+		private bool cached = false;
+		private bool[] greys;
+
 		public bool Match(string word)
 		{
-			int yellowsCount, greensCount;
-			int index;
+			if(IsEmpty())
+				return true;
 
-			index = yellowsCount = greensCount = 0;
-
-			foreach (char letter in word)
-			{
-				if (Greys.Contains(letter))
-					return false;
-
-				if (Yellows.Any(e => e.Item1 == index && e.Item2 == letter))
-					return false;
-
-				if (Greens.Any(e => e.Key == index && e.Value != letter))
-					return false;
-				else if (Greens.Any(e => e.Key == index && e.Value == letter))
-					greensCount++;
-
-				index++;
+			if(!cached) {
+				cached = true;
+				greys = new bool[26];
+				foreach(char c in Greys)
+					greys[c - 'a'] = true;
 			}
 
-			foreach (var yellowLetter in Yellows)
-				if (!word.Contains(yellowLetter.Item2))
+			foreach(var green in Greens)
+				if(word[green.Key] != green.Value)
 					return false;
 
-			if (greensCount != Greens.Count)
-				return false;
+			for(int i = 0; i < word.Length; ++i) {
+				char letter = word[i];
+				if(greys[letter - 'a'])
+					return false;
+				if(Greys.Contains(letter))
+					return false;
+				if(Yellows.Contains((i, letter)))
+					return false;
+			}
+
+			HashSet<char> wordHashSet = word.ToHashSet();
+
+			foreach(var yellow in Yellows)
+				if(!wordHashSet.Contains(yellow.Letter))
+					return false;
 
 			return true;
 		}
@@ -212,6 +222,7 @@ namespace Wordler{
 
 		public void Add(Dictionary<int, char> greens, HashSet<(int, char)> yellows, HashSet<char> greys)
 		{
+			cached = false;
 			foreach (var green in greens)
 			{
 				if (!Greens.ContainsKey(green.Key)) Greens.Add(green.Key, green.Value);

@@ -16,9 +16,6 @@ namespace Wordler {
 		}
 
 		public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings) {
-			Console.WriteLine(settings.Hard);
-			Console.WriteLine(settings.WordList);
-
 			var task = new LiveTask<string, Solver>();
 			task.Run(new Solver(
 				settings.Hard,
@@ -26,7 +23,8 @@ namespace Wordler {
 				settings.LeaderboardLength,
 				settings.Threads,
 				settings.wordClues,
-				typeof(BruteForce)
+				Extensions.GetSolutionType(settings.SolutionName),
+				settings.Divide
 			));
 
 			return 0;

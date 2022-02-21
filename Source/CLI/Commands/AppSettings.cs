@@ -51,6 +51,16 @@ namespace Wordler {
 		[DefaultValue("")]
 		public string Clues { get; set; }
 
+		[Description("The solution (strategy) that is used to determine the best words to use")]
+		[CommandOption("-s|--solution|--strategy")]
+		[DefaultValue("brute-force")]
+		public string SolutionName { get; set; }
+
+		[Description("The part of all possible words that should be considered for best word")]
+		[CommandOption("-d|--divide")]
+		[DefaultValue("1/1")]
+		public string Divide { get; set; }
+
 		public WordClues wordClues;
 
 		public override ValidationResult Validate() {
@@ -92,15 +102,22 @@ namespace Wordler {
 			WordClues wordClues = new WordClues(greenTokens, yellowTokens, greyTokens);
 
 			List<string> clueTokens = Clues.Tokenize();
-			if(Clues.Any(c => !Char.IsLetter(c)))
+			if(clueTokens.Any(c => !Char.IsLetter(c[0])))
 				return ValidationResult.Error("Failed parsing word clues");
 
-			wordClues += new WordClues(clueTokens);
+			wordClues += new WordClues(clueTokens, length);
 
-			if(!wordClues.IsValid())
+			if(!wordClues.IsValid(length))
 				return ValidationResult.Error("Incompatible word clues");
 
 			this.wordClues = wordClues;
+
+			if(Extensions.GetSolutionType(SolutionName) == null)
+				return ValidationResult.Error("No such solution/strategy exists");
+
+			(int Part, int TotalParts)? div = Divide.GetDivision();
+			if(div is null)
+				return ValidationResult.Error("Invalid divide of words");
 
 			return ValidationResult.Success();
 		}
