@@ -71,8 +71,9 @@ namespace Wordler
 
 			while(true) {
 				AnsiConsole.Cursor.Hide();
-				AnsiConsole.Cursor.SetPosition(pos.Left, pos.Top + 1);
-
+				//AnsiConsole.Cursor.SetPosition(pos.Left, pos.Top + 1);
+				Console.CursorLeft = pos.Left;
+				Console.CursorTop = pos.Top;
 
 				int partsTotal, partsDone;
 				string[] footnotes;
@@ -142,7 +143,7 @@ namespace Wordler
 		}
 
 		private bool num = true;
-		private Color[] accents = new Color[] { new Color(155, 215, 155), new Color(215, 215, 215) };
+		private Color[] accents = new Color[] { new Color(155, 215, 155), new Color(204, 204, 204) };
 
 		private Random rng = new Random();
 

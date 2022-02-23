@@ -32,7 +32,12 @@ namespace Wordler
 			var app = new CommandApp<SolveCommand>();
 
 			app.Configure(config => {
-				config.AddCommand<SolveCommand>("solve");
+				config.AddCommand<SolveCommand>("solve")
+					.WithDescription("Solves for and shows the best words that can be used as guesses for a given set of current word clues")
+					.WithExample(new[] { "solve", "--theads", "4"})
+					.WithExample(new[] { "solve", "-t", "4", "--divide", "2/6", "--clues", "\"crane rgrrg bipod rrryr\"", "--wordlist", "C:/Worlder/another_wordlist.txt"})
+					.WithExample(new[] { "solve", "-d", "2/6", "--leaderboard", "30" })
+					.WithExample(new[] { "solve", "-t", "4", "--solution", "brute-force", "--greens", "\"r 1 e 4\"", "-y", "\"o 3\"", "-r", "canbipd" });
 
 				config.SetExceptionHandler(ex => {
 					if(ex is not CommandRuntimeException) {
