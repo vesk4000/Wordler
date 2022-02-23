@@ -112,7 +112,7 @@ namespace Wordler
 				foreach (KeyValuePair<double, string> pair in gradedWords) {
 					if (i >= topResultsToDisplay)
 						break;
-					chartElements.Add(((i + 1).ToString() + ". " + pair.Value, pair.Key));
+					chartElements.Add(  ("[white]" + (i + 1).ToString() + ". " + pair.Value + "[/]", pair.Key));
 					++i;
 				}
 			}

@@ -9,6 +9,13 @@ namespace Wordler {
 	static class Extensions {
 		// credit: youtu.be/sIXKpyhxHR8
 		public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> enumerable, int chunks) {
+			if (chunks <= 0 || enumerable.Count() <= 0) {
+				List<List<T>> ans = new List<List<T>>();
+				for(int i = 0; i < chunks; ++i) {
+					ans.Add(new List<T>());
+				}
+				return ans;
+			}
 			int chunckSize = (int)Math.Ceiling((double)enumerable.Count() / chunks);
 			return enumerable
 				.Select((x, i) => new { Index = i, Value = x })

@@ -1,8 +1,7 @@
 {
   "profiles": {
     "Wordler": {
-      "commandName": "Project",
-      "commandLineArgs": "-t 4"
+      "commandName": "Project"
     }
   }
 }
