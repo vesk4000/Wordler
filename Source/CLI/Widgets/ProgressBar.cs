@@ -20,12 +20,12 @@ namespace Wordler {
 			ans += $"[white]{name}[/]";
 			length += name.Length + 1;
 
-			string progress = Convert.ToString((int)Math.Floor((double)partsDone / partsTotal * 100)) + "%";
+			string progress = partsDone == partsTotal ? "100%" : Convert.ToString((int)Math.Floor((double)partsDone / partsTotal * 100)) + "%";
 			progress = new string(' ', (4 - progress.Length)) + progress;
 			length += progress.Length + 1;
 
 			int doneLength, leftLength;
-			doneLength = (int)Math.Floor(((double)partsDone / partsTotal) * (width - length));
+			doneLength = partsDone == partsTotal ? (width - length) : (int)Math.Floor(((double)partsDone / partsTotal) * (width - length));
 			leftLength = width - length - doneLength;
 
 			ans += $"[{colorDone}]" + new string(part, doneLength) + "[/]" + new string(part, leftLength);

@@ -1,7 +1,8 @@
 {
   "profiles": {
     "Wordler": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "-s hdd --clues \"sanes rrryr deere rrryg\""
     }
   }
 }
