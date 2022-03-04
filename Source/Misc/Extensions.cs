@@ -97,5 +97,28 @@ namespace Wordler {
 
 			return ans;
 		}
+
+
+		// credit: https://stackoverflow.com/a/2601501
+		public static TValue Get<TKey, TValue>
+		(
+			this IDictionary<TKey, TValue> dictionary,
+			TKey key,
+			TValue defaultValue
+		)
+		{
+			return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
+		}
+
+		public static void InsureKeyExists<TKey, TValue>
+		(
+			this IDictionary<TKey, TValue> dictionary,
+			TKey key,
+			TValue defaultValue
+		)
+		{
+			if(!dictionary.ContainsKey(key))
+				dictionary.Add(key, defaultValue);
+		}
 	}
 }

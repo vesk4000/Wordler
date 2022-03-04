@@ -4,22 +4,104 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Wordler{
+namespace Wordler
+{
 	public class WordClues
 	{
-		public Dictionary<int, char> Greens = new Dictionary<int, char>();
-		public HashSet<(int Position, char Letter)> Yellows = new HashSet<(int, char)>();
-		public HashSet<char> Greys = new HashSet<char>();
+		private Dictionary<int, char> greens;
+		private HashSet<(int Position, char Letter)> yellows;
+		private HashSet<char> greys;
+		private Dictionary<char, (int Amount, bool Definitive)> numOccurancesOfLetter;
+		
 
-		public WordClues() { }
-
-		public WordClues(Dictionary<int, char> inputGreens,
-						 HashSet<(int, char)> inputYellows,
-						 HashSet<char> inputGreys)
+		private void Init
+		(
+			Dictionary<int, char> greens,
+			HashSet<(int, char)> yellows,
+			HashSet<char> greys,
+			Dictionary<char, (int Amount, bool Definitive)> numOccurancesOfLetter
+		)
 		{
-			Greens = new Dictionary<int, char>(inputGreens);
-			Yellows = new HashSet<(int, char)>(inputYellows);
-			Greys = new HashSet<char>(inputGreys);
+			this.greens = new Dictionary<int, char>(greens);
+			this.yellows = new HashSet<(int, char)>(yellows);
+			this.greys = new HashSet<char>(greys);
+			this.numOccurancesOfLetter =
+				new Dictionary<char, (int Amount, bool Definitive)>(numOccurancesOfLetter);
+		}
+
+
+		private void Init()
+		{
+			greens = new Dictionary<int, char>();
+			yellows = new HashSet<(int, char)>();
+			greys = new HashSet<char>();
+			numOccurancesOfLetter = new Dictionary<char, (int Amount, bool Definitive)>();
+		}
+
+
+		public WordClues()
+		{
+			Init();
+		}
+
+
+		public WordClues
+		(
+			Dictionary<int, char> greens,
+			HashSet<(int, char)> yellows,
+			HashSet<char> greys,
+			Dictionary<char, (int Amount, bool Definitive)> numOccurancesOfLetter
+		)
+		{
+			Init(greens, yellows, greys, numOccurancesOfLetter);
+		}
+
+
+		public WordClues(WordClues other)
+		{
+			Init(other.greens, other.yellows, other.greys, other.numOccurancesOfLetter);
+		}
+
+
+		public WordClues(string word, string clues)
+		{
+			Init();
+			
+			// TODO: Add error checking here
+
+			for(int i = 0; i < word.Length; ++i)
+			{
+				switch(clues[i])
+				{
+					case 'g':
+						greens.Add(i, word[i]);
+						numOccurancesOfLetter.InsureKeyExists(word[i], (0, false));
+						numOccurancesOfLetter[word[i]] =
+							(numOccurancesOfLetter[word[i]].Amount + 1,
+							numOccurancesOfLetter[word[i]].Definitive);
+						break;
+					case 'y':
+						yellows.Add((i, word[i]));
+						numOccurancesOfLetter.InsureKeyExists(word[i], (0, false));
+						numOccurancesOfLetter[word[i]] =
+							(numOccurancesOfLetter[word[i]].Amount + 1,
+							numOccurancesOfLetter[word[i]].Definitive);
+						break;
+					case 'r':
+						if(greens.ContainsValue(word[i]) || yellows.Any(c => c.Letter == word[i]))
+						{
+							yellows.Add((i, word[i]));
+							numOccurancesOfLetter.InsureKeyExists(word[i], (0, false));
+							numOccurancesOfLetter[word[i]] =
+								(numOccurancesOfLetter[word[i]].Amount, true);
+						}
+						else
+						{
+							greys.Add(word[i]);
+						}
+						break;
+				}
+			}
 		}
 
 		public WordClues(List<string> greens,
@@ -152,12 +234,7 @@ namespace Wordler{
 			}
 		}
 
-		public WordClues(WordClues wordClues)
-		{
-			this.Greens = new Dictionary<int, char>(wordClues.Greens);
-			this.Yellows = new HashSet<(int Position, char Letter)>(wordClues.Yellows);
-			this.Greys = new HashSet<char>(wordClues.Greys);
-		}
+
 
 		public bool IsEmpty() {
 			return Greens.Count == 0 && Yellows.Count == 0 && Greys.Count == 0;
