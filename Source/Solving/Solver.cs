@@ -58,6 +58,8 @@ namespace Wordler
 
 			HashSet<string> wordsPreCache = File.ReadAllLines(wordListPath).ToHashSet();
 
+			List<string> wordsNoCache = wordsPreCache.ToList();
+			
 			List<(string Key, double Value)> cachedWords = wordClues.IsEmpty() ? Cacher.GetCache<string, double>() : new List<(string Key, double Value)>();
 			foreach(var word in cachedWords) {
 				if(wordsPreCache.Contains(word.Key)) {
@@ -86,7 +88,7 @@ namespace Wordler
 
 			solutions = new List<Solution>();
 			for(int i = 0; i < numThreads; ++i) {
-				solutions.Add((Solution)Activator.CreateInstance(solution, this, wordsChunked[i], words, wordClues, hard));
+				solutions.Add((Solution)Activator.CreateInstance(solution, this, wordsChunked[i], wordsNoCache, wordClues, hard));
 			}
 		}
 

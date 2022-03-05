@@ -99,7 +99,7 @@ namespace Wordler
 				leaderboardChart = new BarChart();
 
 
-
+				num = true;
 				leaderboardChart.AddItems(
 					chartElements,
 					(element) => new BarChartItem(element.Label, element.Value, getAccent())

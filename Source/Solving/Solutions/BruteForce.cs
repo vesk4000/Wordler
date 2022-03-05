@@ -21,8 +21,10 @@ namespace Wordler {
 				lock(updateLock) {
 					double sumReductions = 0;
 
-					if(hard && !wordClues.Match(gradeableWord))
+					if(hard && !wordClues.Match(gradeableWord)) {
+						CacheGradedWord(gradeableWord, 0);
 						continue;
+					}
 
 					int numPotCompWords = potentialComputerWords.Count;
 
