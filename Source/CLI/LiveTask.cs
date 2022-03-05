@@ -14,6 +14,8 @@ namespace Wordler
 	{
 		public void Run(ITaskable<TResult> taskedObject, int fps = 10)
 		{
+			Console.Clear();
+
 			Color accent = new Color(155, 215, 155); //0,215,175 | 0,255,135 | 95,215,215
 
 			var masterTable = new Table();

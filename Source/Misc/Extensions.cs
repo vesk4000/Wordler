@@ -9,6 +9,13 @@ namespace Wordler {
 	static class Extensions {
 		// credit: youtu.be/sIXKpyhxHR8
 		public static IEnumerable<IEnumerable<T>> Chunk<T>(this IEnumerable<T> enumerable, int chunks) {
+			if (chunks <= 0 || enumerable.Count() <= 0) {
+				List<List<T>> ans = new List<List<T>>();
+				for(int i = 0; i < chunks; ++i) {
+					ans.Add(new List<T>());
+				}
+				return ans;
+			}
 			int chunckSize = (int)Math.Ceiling((double)enumerable.Count() / chunks);
 			return enumerable
 				.Select((x, i) => new { Index = i, Value = x })
@@ -89,6 +96,29 @@ namespace Wordler {
 				return null;
 
 			return ans;
+		}
+
+
+		// credit: https://stackoverflow.com/a/2601501
+		public static TValue Get<TKey, TValue>
+		(
+			this IDictionary<TKey, TValue> dictionary,
+			TKey key,
+			TValue defaultValue
+		)
+		{
+			return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
+		}
+
+		public static void InsureKeyExists<TKey, TValue>
+		(
+			this IDictionary<TKey, TValue> dictionary,
+			TKey key,
+			TValue defaultValue
+		)
+		{
+			if(!dictionary.ContainsKey(key))
+				dictionary.Add(key, defaultValue);
 		}
 	}
 }
