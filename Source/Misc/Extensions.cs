@@ -110,7 +110,7 @@ namespace Wordler {
 			return dictionary.TryGetValue(key, out var value) ? value : defaultValue;
 		}
 
-		public static void InsureKeyExists<TKey, TValue>
+		public static void EnsureKeyExists<TKey, TValue>
 		(
 			this IDictionary<TKey, TValue> dictionary,
 			TKey key,

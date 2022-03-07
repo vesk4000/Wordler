@@ -28,6 +28,8 @@ namespace Wordler {
 
 					int numPotCompWords = potentialComputerWords.Count;
 
+					
+
 					foreach (string potentialComputerWord in potentialComputerWords) {
 						if (!wordClues.Match(potentialComputerWord)) {
 							--numPotCompWords;
@@ -37,7 +39,6 @@ namespace Wordler {
 						WordClues tempWordClues = new WordClues(gradeableWord, potentialComputerWord) + wordClues;
 						int numReducedWords = 0;
 						int numReducableWords = 0;
-
 						foreach (string computerWord in potentialComputerWords) {
 							if(wordClues.Match(computerWord)) {
 								++numReducableWords;
@@ -47,7 +48,7 @@ namespace Wordler {
 							}
 								
 						}
-
+						
 						if(wordClues.Match(gradeableWord)) {
 							++numReducableWords;
 							++numReducedWords;
