@@ -61,7 +61,13 @@ namespace Wordler {
 		[DefaultValue("1/1")]
 		public string Divide { get; set; }
 
+		[Description("Uploads your cache to Pastebin. You must specify your Pastebin credentials, seperated by spaces: Developer API Key (can be found at https://pastebin.com/doc_api#1), Username and Password.")]
+		[CommandOption("-p|--pastebin")]
+		[DefaultValue("")]
+		public string Pastebin { get; set; }
+
 		public WordClues wordClues;
+		public PastebinAPI.User user;
 
 		public override ValidationResult Validate() {
 
@@ -118,6 +124,27 @@ namespace Wordler {
 			(int Part, int TotalParts)? div = Divide.GetDivision();
 			if(div is null)
 				return ValidationResult.Error("Invalid divide of words");
+
+			if(Pastebin != "")
+			{
+				string[] pastebinCredentials = Pastebin.Split(' ');
+				if (pastebinCredentials.Count() != 3)
+					return ValidationResult.Error("Invalid Pastebin credentials");
+
+				string APIKey = pastebinCredentials[0];
+				string username = pastebinCredentials[1];
+				string password = pastebinCredentials[2];
+				try
+				{
+					PastebinAPI.Pastebin.DevKey = APIKey;
+					user = PastebinAPI.Pastebin.LoginAsync(username, password).GetAwaiter().GetResult();
+
+				}
+				catch(PastebinAPI.PastebinException)
+				{
+					return ValidationResult.Error("Invalid Pastebin credentials");
+				}
+			}
 
 			return ValidationResult.Success();
 		}

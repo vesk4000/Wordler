@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace Wordler {
 	static class Cacher {
-		private static string path;
+		public static string path;
 		private static XDocument doc = new XDocument();
 		private static Object docLock = new Object();
 		private static string section = "";

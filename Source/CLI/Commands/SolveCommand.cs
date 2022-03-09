@@ -8,6 +8,7 @@ using Spectre.Console;
 using Spectre.Console.Cli;
 using System.Threading;
 using System.Diagnostics;
+using System.IO;
 
 namespace Wordler {
 	class SolveCommand : Command<SolveCommand.Settings> {
@@ -26,6 +27,14 @@ namespace Wordler {
 				Extensions.GetSolutionType(settings.SolutionName),
 				settings.Divide
 			));
+
+			settings.user.CreatePasteAsync
+			(
+				File.ReadAllText(Cacher.path),
+				"Wordler Cache " + DateTime.Now.ToString(),
+				PastebinAPI.Language.XML,
+				PastebinAPI.Visibility.Private
+			).Wait();
 
 			return 0;
 		}
