@@ -66,6 +66,11 @@ namespace Wordler {
 		[DefaultValue("")]
 		public string Pastebin { get; set; }
 
+		[Description("Time (in seconds) after which to conclude the grading of words")]
+		[CommandOption("--tl|--timelimit|--time-limit")]
+		[DefaultValue(3_600_000)]
+		public int TimeLimit { get; set; }
+
 		public WordClues wordClues;
 		public PastebinAPI.User user;
 
@@ -145,6 +150,9 @@ namespace Wordler {
 					return ValidationResult.Error("Invalid Pastebin credentials");
 				}
 			}
+
+			if (TimeLimit < 0)
+				return ValidationResult.Error("Invalid time limit");
 
 			return ValidationResult.Success();
 		}

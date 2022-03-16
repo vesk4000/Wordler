@@ -16,7 +16,7 @@ namespace Wordler {
 
 		protected WordClues wordClues;
 
-		private Thread solution;
+		public Thread solution;
 		private Thread cacher;
 
 		public abstract void GradeWords();
@@ -27,7 +27,7 @@ namespace Wordler {
 			this.potentialComputerWords = potentialComputerWords;
 			this.wordClues = wordClues;
 			this.hard = hard;
-			solution = new Thread(new ThreadStart(GradeWords));
+			solution = new Thread(new ThreadStart(() => { try { GradeWords(); } catch (Exception ex) { } }));
 			solution.Start();
 			cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
 			cacher.Start();

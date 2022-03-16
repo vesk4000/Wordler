@@ -26,7 +26,7 @@ namespace Wordler {
 				settings.wordClues,
 				Extensions.GetSolutionType(settings.SolutionName),
 				settings.Divide
-			));
+			), settings.TimeLimit);
 
 			settings.user.CreatePasteAsync
 			(

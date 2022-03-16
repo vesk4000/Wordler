@@ -12,7 +12,7 @@ namespace Wordler
 {
 	class LiveTask<TResult, TTask> where TTask : ITaskable<TResult>
 	{
-		public void Run(ITaskable<TResult> taskedObject, int fps = 10)
+		public void Run(ITaskable<TResult> taskedObject, int timeLimit, int fps = 10)
 		{
 			Console.Clear();
 
@@ -135,6 +135,12 @@ namespace Wordler
 
 				if(partsTotal == partsDone)
 					break;
+
+				if(upTimer.Elapsed.TotalSeconds > timeLimit)
+				{
+					taskedObject.Terminate();
+					break;
+				}
 
 				Thread.Sleep(1000 / fps);
 			}

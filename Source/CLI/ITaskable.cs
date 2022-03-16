@@ -17,5 +17,7 @@ namespace Wordler
 			out Type solution,
 			out bool hard
 		);
+
+		public void Terminate();
 	}
 }

@@ -2,7 +2,7 @@
   "profiles": {
     "Wordler": {
       "commandName": "Project",
-      "commandLineArgs": "-t 4 -d 1/4000 -p \"2RLyQBWOCggxaoWsi2V1HDiCVJfpKCTR Vesk4000 xUiic4WkiQbcg5GQ\""
+      "commandLineArgs": "--tl 20"
     },
     "WSL": {
       "commandName": "WSL2",
