@@ -16,7 +16,7 @@ namespace Wordler {
 		// hard
 		// wordClues
 		// CacheGradedWord(string gradeableWord, double grade);
-		public override void GradeWords() {
+		public override void GradeWords(CancellationToken cancelToken) {
 			foreach(string gradeableWord in gradeableWords) {
 				lock(updateLock) {
 					double sumReductions = 0;
@@ -31,6 +31,9 @@ namespace Wordler {
 					
 
 					foreach (string potentialComputerWord in potentialComputerWords) {
+						if(cancelToken.IsCancellationRequested)
+							return;
+
 						if (!wordClues.Match(potentialComputerWord)) {
 							--numPotCompWords;
 							continue;

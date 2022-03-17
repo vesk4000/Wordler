@@ -28,13 +28,14 @@ namespace Wordler {
 				settings.Divide
 			), settings.TimeLimit);
 
-			settings.user.CreatePasteAsync
-			(
-				File.ReadAllText(Cacher.path),
-				"Wordler Cache " + DateTime.Now.ToString(),
-				PastebinAPI.Language.XML,
-				PastebinAPI.Visibility.Private
-			).Wait();
+			if(settings.user is not null)
+				settings.user.CreatePasteAsync
+				(
+					File.ReadAllText(Cacher.path),
+					"Wordler Cache " + DateTime.Now.ToString(),
+					PastebinAPI.Language.XML,
+					PastebinAPI.Visibility.Private
+				).Wait();
 
 			return 0;
 		}

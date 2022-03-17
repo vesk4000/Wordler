@@ -133,10 +133,9 @@ namespace Wordler
 			lock(usingGradedWords)
 			{
 				foreach (Solution sol in solutions)
-				{
-					sol.solution.Interrupt();
+					sol.Terminate();
+				foreach(Solution sol in solutions)
 					sol.solution.Join();
-				}
 			}
 		}
 	}
