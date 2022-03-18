@@ -40,6 +40,7 @@ namespace Wordler {
 			if(settings.PowerShellCommands != "")
 			{
 				var psc = new ProcessStartInfo("powershell.exe", " -Command { " + settings.PowerShellCommands.Replace("@ID", Process.GetCurrentProcess().Id.ToString() + " }"));
+				psc.WorkingDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
 				Process.Start(psc);
 			}
 
