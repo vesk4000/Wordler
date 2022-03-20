@@ -14,7 +14,7 @@ namespace Wordler_Launcher
 			wordler.StartInfo.CreateNoWindow = true;
 			wordler.StartInfo.Arguments = File.ReadAllText(Directory.GetCurrentDirectory() + "\\Wordler\\launcher_args.txt");
 			wordler.StartInfo.WorkingDirectory = Directory.GetCurrentDirectory() + "\\Wordler";
-			Console.WriteLine($"{wordler.StartInfo.FileName} {wordler.StartInfo.Arguments}");
+			//Console.WriteLine($"{wordler.StartInfo.FileName} {wordler.StartInfo.Arguments}");
 			wordler.Start();
 			return;
 		}

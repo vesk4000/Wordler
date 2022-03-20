@@ -269,7 +269,10 @@ namespace Wordler
 
 		public bool IsEmpty()
 		{
-			return greens.Count == 0 && yellows.Count == 0 && greys.Count == 0;
+			return greens.Count == 0
+				&& yellows.Count == 0
+				&& greys.Count == 0
+				&& numOccurancesOfLetter.Count == 0;
 		}
 
 
@@ -313,7 +316,9 @@ namespace Wordler
 
 		public bool Match(string word)
 		{
-			
+			if(IsEmpty())
+				return true;
+
 			foreach(var green in greens)
 				if(word[green.Key] != green.Value)
 					return false;
@@ -358,6 +363,21 @@ namespace Wordler
 					return false;
 
 			return true;
+		}
+
+
+		public override int GetHashCode()
+		{
+			return (greens, yellows, greys, numOccurancesOfLetter).GetHashCode();
+		}
+
+
+		public override bool Equals(object obj)
+		{
+			if(obj is not WordClues)
+				return false;
+			WordClues other = (WordClues)obj;
+			return greens == other.greens && other.yellows == yellows && greys == other.greys && numOccurancesOfLetter == other.numOccurancesOfLetter;
 		}
 
 

