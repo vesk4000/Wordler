@@ -8,8 +8,8 @@ namespace Wordler {
 	[SolutionNames("bruteforce|brute-force")]
 	[KeyComparer(typeof(DuplicateKeyComparerDescending<double>))]
 	class BruteForce : Solution {
-		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard)
-			: base(solver, gradeableWords, potentialComputerWords, wordClues, hard) { }
+		public BruteForce(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard, bool cache)
+			: base(solver, gradeableWords, potentialComputerWords, wordClues, hard, cache) { }
 
 		// gradeableWords
 		// potentialComputerWords

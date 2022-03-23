@@ -21,16 +21,20 @@ namespace Wordler {
 
 		public abstract void GradeWords();
 
-		public Solution(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard) {
+		public Solution(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard, bool cache) {
 			this.solver = solver;
 			this.gradeableWords = gradeableWords;
 			this.potentialComputerWords = potentialComputerWords;
 			this.wordClues = wordClues;
 			this.hard = hard;
+
 			solution = new Thread(new ThreadStart(GradeWords));
 			solution.Start();
-			cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
-			cacher.Start();
+
+			if (cache == true) {
+				cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
+				cacher.Start();
+			}
 		}
 
 		private void ContinuouslyAddGradedWords() {

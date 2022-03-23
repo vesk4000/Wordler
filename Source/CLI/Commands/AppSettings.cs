@@ -11,6 +11,11 @@ using System.IO;
 namespace Wordler {
 	class AppSettings : CommandSettings {
 
+		[Description("Graded words are cached")]
+		[CommandOption("--cache")]
+		[DefaultValue(false)]
+		public bool Cache { get; set; }
+
 		[Description("Only words that match the current clues can be guessed")]
 		[CommandOption("-h|--hard")]
 		[DefaultValue(false)]

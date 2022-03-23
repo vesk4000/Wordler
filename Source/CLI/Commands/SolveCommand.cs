@@ -18,6 +18,7 @@ namespace Wordler {
 		public override int Execute([NotNull] CommandContext context, [NotNull] Settings settings) {
 			var task = new LiveTask<string, Solver>();
 			task.Run(new Solver(
+				settings.Cache,
 				settings.Hard,
 				settings.WordList,
 				settings.LeaderboardLength,

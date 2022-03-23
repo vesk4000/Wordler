@@ -21,6 +21,8 @@ namespace Wordler
 
 		public bool hard;
 
+		private bool cache;
+
 		private int numThreads;
 
 		public WordClues wordClues;
@@ -34,6 +36,7 @@ namespace Wordler
 		private Type sol;
 
 		public Solver(
+			bool cache,
 			bool hard,
 			string wordListPath,
 			int topResultsToDisplay,
@@ -42,6 +45,7 @@ namespace Wordler
 			Type solution,
 			string divisionsString
 		) {
+			this.cache = cache;
 			this.hard = hard;
 			this.wordListPath = wordListPath;
 			this.topResultsToDisplay = topResultsToDisplay;
@@ -88,7 +92,7 @@ namespace Wordler
 
 			solutions = new List<Solution>();
 			for(int i = 0; i < numThreads; ++i) {
-				solutions.Add((Solution)Activator.CreateInstance(solution, this, wordsChunked[i], wordsNoCache, wordClues, hard));
+				solutions.Add((Solution)Activator.CreateInstance(solution, this, wordsChunked[i], wordsNoCache, wordClues, hard, cache));
 			}
 		}
 

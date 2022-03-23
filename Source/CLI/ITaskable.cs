@@ -14,7 +14,7 @@ namespace Wordler
 			out List<(string Label, double Value)> chartElements,
 			out string[] footnotes,
 			out T currentResult,
-			out Type solution,
+			out Type sol,
 			out bool hard
 		);
 	}
