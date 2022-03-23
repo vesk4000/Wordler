@@ -17,5 +17,7 @@ namespace Wordler
 			out Type sol,
 			out bool hard
 		);
+
+		public void Terminate();
 	}
 }

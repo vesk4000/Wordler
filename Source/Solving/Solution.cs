@@ -16,10 +16,11 @@ namespace Wordler {
 
 		protected WordClues wordClues;
 
-		private Thread solution;
+		public Thread solution;
 		private Thread cacher;
+		private CancellationTokenSource cancelTokenSource;
 
-		public abstract void GradeWords();
+		public abstract void GradeWords(CancellationToken cancelToken);
 
 		public Solution(Solver solver, List<string> gradeableWords, List<string> potentialComputerWords, WordClues wordClues, bool hard, bool cache) {
 			this.solver = solver;
@@ -27,15 +28,20 @@ namespace Wordler {
 			this.potentialComputerWords = potentialComputerWords;
 			this.wordClues = wordClues;
 			this.hard = hard;
-
-			solution = new Thread(new ThreadStart(GradeWords));
+			cancelTokenSource = new CancellationTokenSource();
+			solution = new Thread(new ThreadStart(() => GradeWords(cancelTokenSource.Token)));
 			solution.Start();
-
-			if (cache == true) {
-				cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
-				cacher.Start();
-			}
+			cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
+			cacher.Start();
+			
 		}
+
+		
+		public void Terminate()
+		{
+			cancelTokenSource.Cancel();
+		}
+
 
 		private void ContinuouslyAddGradedWords() {
 			return;

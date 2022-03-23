@@ -122,7 +122,6 @@ namespace Wordler
 					++i;
 				}
 			}
-			
 		}
 
 		public void AddWord(string word, double grade) {
@@ -130,6 +129,17 @@ namespace Wordler
 				gradedWords.Add(grade, word);
 
 				Interlocked.Exchange(ref usingGradedWords, 0);
+			}
+		}
+
+		public void Terminate()
+		{
+			lock(usingGradedWords)
+			{
+				foreach (Solution sol in solutions)
+					sol.Terminate();
+				foreach(Solution sol in solutions)
+					sol.solution.Join();
 			}
 		}
 	}

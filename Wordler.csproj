@@ -3,9 +3,18 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <ApplicationIcon />
+    <StartupObject />
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Wordler Launcher\**" />
+    <EmbeddedResource Remove="Wordler Launcher\**" />
+    <None Remove="Wordler Launcher\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PastebinAPI" Version="1.1.1" />
     <PackageReference Include="Spectre.Console" Version="0.43.0" />
   </ItemGroup>
 

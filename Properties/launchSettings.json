@@ -2,7 +2,11 @@
   "profiles": {
     "Wordler": {
       "commandName": "Project",
-      "commandLineArgs": "-t 4 --cache"
+      "commandLineArgs": "-t 4"
+    },
+    "WSL": {
+      "commandName": "WSL2",
+      "distributionName": ""
     }
   }
 }
