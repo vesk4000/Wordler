@@ -31,9 +31,8 @@ namespace Wordler {
 			cancelTokenSource = new CancellationTokenSource();
 			solution = new Thread(new ThreadStart(() => GradeWords(cancelTokenSource.Token)));
 			solution.Start();
-			cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
-			cacher.Start();
-			
+				cacher = new Thread(new ThreadStart(ContinuouslyAddGradedWords));
+				cacher.Start();
 		}
 
 		

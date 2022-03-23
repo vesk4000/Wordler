@@ -11,6 +11,11 @@ using System.IO;
 namespace Wordler {
 	class AppSettings : CommandSettings {
 
+		[Description("Mode of the application")]
+		[CommandOption("-m|--mode")]
+		[DefaultValue("solve")]
+		public string Mode { get; set; }
+
 		[Description("Graded words are cached")]
 		[CommandOption("--cache")]
 		[DefaultValue(false)]

@@ -20,6 +20,9 @@ namespace Wordler {
 			ans += $"[white]{name}[/]";
 			length += name.Length + 1;
 
+			if (partsTotal == 0)
+				partsTotal = 1;
+			
 			string progress = Convert.ToString((int)Math.Floor((double)partsDone / partsTotal * 100)) + "%";
 			progress = new string(' ', (4 - progress.Length)) + progress;
 			length += progress.Length + 1;

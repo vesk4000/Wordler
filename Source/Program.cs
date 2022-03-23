@@ -39,10 +39,10 @@ namespace Wordler
 					.WithExample(new[] { "solve", "-d", "2/6", "--leaderboard", "30" })
 					.WithExample(new[] { "solve", "-t", "4", "--solution", "brute-force", "--greens", "\"r 1 e 4\"", "-y", "\"o 3\"", "-r", "canbipd" });
 
-				//config.AddCommand<BenchmarkCommand>("benchmark")
-				//	.WithDescription("Runs a benchmark test to determine the effectiveness (time and accuracy) of a specific solution");
+                config.AddCommand<BenchmarkCommand>("benchmark")
+                    .WithDescription("Runs a benchmark test to determine the effectiveness (time and accuracy) of a specific solution");
 
-				config.SetExceptionHandler(ex => {
+                config.SetExceptionHandler(ex => {
 					if(ex is not CommandRuntimeException) {
 						AnsiConsole.MarkupLine("[red]Fatal Error:[/] Something went wrong. Please report the issue to https://github.com/vesk4000/Wordler/issues");
 						AnsiConsole.WriteException(ex, ExceptionFormats.ShortenEverything);

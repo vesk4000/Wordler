@@ -64,7 +64,7 @@ namespace Wordler
 				wordClues,
 				solution,
 				divisionsString
-			));
+			), 10000);
 
 			foreach (string word in words)
             {
@@ -102,44 +102,49 @@ namespace Wordler
             }
         }
 
+        public void Terminate()
+        {
+            throw new NotImplementedException();
+        }
+
         //public static List<string> wordList = File.ReadAllText(@"..\..\..\shortwordlist.txt").Split(";").ToList();
-		//public static Dictionary<string, double> wordProbability;
-		//public static List<string> wordProbabilityList = new List<string>();
+        //public static Dictionary<string, double> wordProbability;
+        //public static List<string> wordProbabilityList = new List<string>();
 
-		//public static void IcySolve()
-		//{
-		//	int guesses = 0;
-		//	int failed = 0;
+        //public static void IcySolve()
+        //{
+        //	int guesses = 0;
+        //	int failed = 0;
 
-		//	ProbabilityCalculatorHDD.CalculateProbabilities(wordList, false);
+        //	ProbabilityCalculatorHDD.CalculateProbabilities(wordList, false);
 
-		//	foreach (string goal in wordList)
-		//	{
-		//		wordProbabilityList.Clear();
-		//		wordProbabilityList.AddRange(wordProbability.Keys.ToList());
+        //	foreach (string goal in wordList)
+        //	{
+        //		wordProbabilityList.Clear();
+        //		wordProbabilityList.AddRange(wordProbability.Keys.ToList());
 
-		//		WordClues wordClues = new WordClues();
-		//		int guessCount = 0;
-		//		string guess = string.Empty;
+        //		WordClues wordClues = new WordClues();
+        //		int guessCount = 0;
+        //		string guess = string.Empty;
 
-		//		while (guess != goal)
-		//		{
-		//			guess = wordProbabilityList.First();
-		//			wordClues = GenerateClues(wordClues, guess, goal);
+        //		while (guess != goal)
+        //		{
+        //			guess = wordProbabilityList.First();
+        //			wordClues = GenerateClues(wordClues, guess, goal);
 
-		//			guessCount++;
+        //			guessCount++;
 
-		//			wordProbabilityList.RemoveAll(e => !wordClues.Match(e));
+        //			wordProbabilityList.RemoveAll(e => !wordClues.Match(e));
 
-		//			ProbabilityCalculatorHDD.CalculateProbabilities(wordProbabilityList, true);
-		//		}
+        //			ProbabilityCalculatorHDD.CalculateProbabilities(wordProbabilityList, true);
+        //		}
 
-		//		guesses += guessCount;
+        //		guesses += guessCount;
 
-		//		if (guessCount > 6) { failed++; Console.WriteLine(goal); Console.WriteLine($"{goal}: {guessCount}"); }
-		//	}
-		//	Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
-		//	Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
-		//}
-	}
+        //		if (guessCount > 6) { failed++; Console.WriteLine(goal); Console.WriteLine($"{goal}: {guessCount}"); }
+        //	}
+        //	Console.WriteLine($"Average: {(double)((double)guesses / (double)wordList.Count)}");
+        //	Console.WriteLine($"Failed: {failed} -> {((double)((double)failed / (double)wordList.Count) * 100):F2}%");
+        //}
+    }
 }

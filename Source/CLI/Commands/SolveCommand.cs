@@ -29,7 +29,7 @@ namespace Wordler {
 				settings.Divide
 			), settings.TimeLimit);
 
-			if(settings.user is not null)
+			if (settings.user is not null)
 				settings.user.CreatePasteAsync
 				(
 					File.ReadAllText(Cacher.path),
@@ -38,7 +38,7 @@ namespace Wordler {
 					PastebinAPI.Visibility.Private
 				).Wait();
 
-			if(settings.PowerShellCommands != "")
+			if (settings.PowerShellCommands != "")
 			{
 				var psc = new ProcessStartInfo("powershell.exe", " -Command { " + settings.PowerShellCommands.Replace("@ID", Process.GetCurrentProcess().Id.ToString() + " }"));
 				psc.WorkingDirectory = Directory.GetParent(Directory.GetCurrentDirectory()).FullName;
